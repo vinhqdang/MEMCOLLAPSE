@@ -16,6 +16,21 @@ def test_schedule_ends_at_last_and_has_freq_mentions(freq, last):
     assert len(s) == freq and s[-1] == last and list(s) == sorted(set(s))
 
 
+@pytest.mark.parametrize("freq,last", [(1, 5), (2, 5), (4, 8)])
+def test_clustered_schedule_is_consecutive_ending_at_last(freq, last):
+    s = mention_schedule(freq, last, "clustered")
+    assert s == tuple(range(last - freq + 1, last + 1))
+
+
+def test_clustered_dialogue_mentions_match_metadata():
+    d = build_dialogue(BANK, 5, schedule="clustered")
+    for cm in d.claims:
+        assert cm.last - cm.first == cm.freq - 1
+        hits = [s for s in range(1, 17)
+                if any(u.tag == f"claim:{cm.claim_id}" for u in d.sessions[s - 1])]
+        assert tuple(hits) == cm.mention_sessions
+
+
 def test_schedule_rejects_impossible():
     with pytest.raises(ValueError):
         mention_schedule(4, 3)

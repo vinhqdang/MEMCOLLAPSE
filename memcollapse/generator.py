@@ -92,12 +92,23 @@ def load_bank(path: str | Path) -> Bank:
     )
 
 
-def mention_schedule(freq: int, last: int) -> tuple[int, ...]:
-    """Sessions (1-based) in which a claim is mentioned; always ends at `last`."""
+SCHEDULES = ("spread", "clustered")
+
+
+def mention_schedule(freq: int, last: int, mode: str = "spread") -> tuple[int, ...]:
+    """Sessions (1-based) in which a claim is mentioned; always ends at `last`.
+
+    spread:    mentions evenly spaced over [1, last]
+    clustered: mentions in consecutive sessions [last-freq+1, last]
+    """
     if freq < 1 or last < freq:
         raise ValueError(f"invalid freq={freq} last={last}")
+    if mode not in SCHEDULES:
+        raise ValueError(f"unknown schedule mode {mode!r}")
     if freq == 1:
         return (last,)
+    if mode == "clustered":
+        return tuple(range(last - freq + 1, last + 1))
     pts = np.linspace(1, last, freq)
     sessions = tuple(sorted({int(round(p)) for p in pts}))
     if len(sessions) != freq or sessions[-1] != last:
@@ -125,14 +136,15 @@ def _progress_line(rng: random.Random, session: int) -> str:
 
 
 def build_dialogue(bank: Bank, d_idx: int, n_sessions: int = 16,
-                   per_importance: int = 6, seed: int = 0) -> Dialogue:
+                   per_importance: int = 6, seed: int = 0,
+                   schedule: str = "spread") -> Dialogue:
     rng = random.Random(seed * 100_003 + d_idx)
     metas: list[ClaimMeta] = []
     for claim, freq in select_claims(bank, d_idx, per_importance):
         last = rng.choice([L for L in LAST_MENTION_CHOICES if L >= freq and L <= n_sessions])
         metas.append(ClaimMeta(
             claim_id=claim.id, importance=claim.importance, type=claim.type,
-            freq=freq, mention_sessions=mention_schedule(freq, last),
+            freq=freq, mention_sessions=mention_schedule(freq, last, schedule),
             speaker=rng.choice(bank.speakers),
         ))
     by_id = {c.id: c for c in bank.claims}
@@ -150,7 +162,7 @@ def build_dialogue(bank: Bank, d_idx: int, n_sessions: int = 16,
         utts.append(Utterance(bank.speakers[0], _progress_line(rng, s), "progress"))
         rng.shuffle(utts)
         sessions.append(tuple(utts))
-    return Dialogue(dialogue_id=f"{bank.domain}-{seed}-{d_idx:04d}",
+    return Dialogue(dialogue_id=f"{bank.domain}-{schedule}-{seed}-{d_idx:04d}",
                     sessions=tuple(sessions), claims=tuple(metas))
 
 

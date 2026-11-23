@@ -30,14 +30,15 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=str(ROOT / "results" / "pilot"))
     ap.add_argument("--skip-full", action="store_true")
+    ap.add_argument("--schedule", choices=["spread", "clustered"], default="spread")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     out = Path(args.out)
     tag = args.model.split("/")[-1]
     bank = load_bank(args.bank)
-    dialogues = [build_dialogue(bank, i, n_sessions=args.sessions, seed=args.seed)
-                 for i in range(args.n)]
+    dialogues = [build_dialogue(bank, i, n_sessions=args.sessions, seed=args.seed,
+                                schedule=args.schedule) for i in range(args.n)]
     model = HFModel(args.model)
     probes_path, mem_path = out / f"probes_{tag}.jsonl", out / f"memories_{tag}.jsonl"
     for p in (probes_path, mem_path):
