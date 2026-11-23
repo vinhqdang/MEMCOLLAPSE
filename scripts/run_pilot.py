@@ -15,6 +15,7 @@ sys.path.insert(0, str(ROOT))
 
 from memcollapse.generator import build_dialogue, load_bank  # noqa: E402
 from memcollapse.llm import HFModel  # noqa: E402
+from memcollapse.naturalize import load_rendered  # noqa: E402
 from memcollapse.runner import (full_memories, probe_all, rolling_memories,  # noqa: E402
                                 save_memories, save_records, truncation_memories)
 
@@ -31,14 +32,19 @@ def main() -> None:
     ap.add_argument("--out", default=str(ROOT / "results" / "pilot"))
     ap.add_argument("--skip-full", action="store_true")
     ap.add_argument("--schedule", choices=["spread", "clustered"], default="spread")
+    ap.add_argument("--rendered", default=None,
+                    help="JSONL of naturalised sessions (from scripts/naturalize_dialogues.py)")
+    ap.add_argument("--name", default=None, help="tag added to output filenames")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
     out = Path(args.out)
-    tag = args.model.split("/")[-1]
+    tag = args.model.split("/")[-1] if not args.name else f"{args.name}_{args.model.split('/')[-1]}"
     bank = load_bank(args.bank)
     dialogues = [build_dialogue(bank, i, n_sessions=args.sessions, seed=args.seed,
                                 schedule=args.schedule) for i in range(args.n)]
+    if args.rendered:
+        dialogues = load_rendered(dialogues, Path(args.rendered))
     model = HFModel(args.model)
     probes_path, mem_path = out / f"probes_{tag}.jsonl", out / f"memories_{tag}.jsonl"
     for p in (probes_path, mem_path):

@@ -1,0 +1,453 @@
+{
+ "domain": "smart_kettle_launch",
+ "project": "Project Ember: launching a connected smart kettle across hardware certification, firmware, supply chain, retail partners and marketing",
+ "majority_thread": [
+  "Overall the kettle is in good shape and we are on track to launch on schedule.",
+  "I'm comfortable with where we are; the last prototype review went well and the launch plan looks realistic.",
+  "Status is green from my side, I see no reason to move the launch date.",
+  "Leadership is happy with progress and wants to keep the launch on the current timeline.",
+  "Most of the team agrees the remaining work is routine and we should proceed as planned.",
+  "Spending is tracking to plan and our partners have been responsive, so let's keep moving.",
+  "I think we're aligned: ship the kettle on schedule and keep the current plan.",
+  "Nothing blocking from my area, the launch plan stays as it is."
+ ],
+ "filler": [
+  "Can everyone see my screen? Let me share the launch tracker.",
+  "Sorry, I was on mute. Could you repeat the last point?",
+  "Let's quickly go around the table for updates.",
+  "I'll send the notes around after the call.",
+  "We're a few minutes over, let's wrap up soon.",
+  "Thanks everyone, good discussion today.",
+  "I moved a few cards on the launch board this morning.",
+  "Let's park that and come back to it next week.",
+  "Does anyone have anything else before we close?",
+  "I'll set up a follow-up call with the relevant people.",
+  "The tracker looks much the same as last week.",
+  "I have a hard stop at the top of the hour.",
+  "Let me pull up the launch timeline slide.",
+  "Good point, let's capture that as an action item.",
+  "I'll check with my manager and get back to you.",
+  "Same as last time, nothing new from my side."
+ ],
+ "speakers": [
+  "Dana (product manager)",
+  "Kofi (hardware lead)",
+  "Ines (firmware engineer)",
+  "Rahul (supply-chain manager)",
+  "Greta (compliance officer)",
+  "Marco (marketing lead)",
+  "Yuki (customer-support lead)",
+  "Owen (finance controller)"
+ ],
+ "claims": [
+  {
+   "id": "c01",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Heads up: in the boil-dry test the thermal fuse only tripped at 118 degrees Celsius, well above where we expected.",
+    "The boil-dry results haven't changed, the thermal fuse is still tripping at 118 degrees Celsius.",
+    "Again, that thermal fuse doesn't cut out until 118 degrees Celsius in the boil-dry run.",
+    "For the record, 118 degrees Celsius is still the trip point we're seeing on the thermal fuse in boil-dry testing."
+   ],
+   "question": "According to the meetings, at what temperature did the thermal fuse trip during the boil-dry test?",
+   "answer": "118 degrees Celsius",
+   "distractors": [
+    "126 degrees Celsius",
+    "104 degrees Celsius"
+   ]
+  },
+  {
+   "id": "c02",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The big retail chain will only stock us provided the retail box is no deeper than 28 cm, because of their shelf depth.",
+    "Just a reminder, their shelves only take a box no deeper than 28 cm, otherwise no listing.",
+    "Still the same condition from the retailer: the packaging can't be deeper than 28 cm.",
+    "The listing still depends on keeping the box depth at 28 cm or less."
+   ],
+   "question": "According to the meetings, what packaging condition did the retail chain set for stocking the kettle?",
+   "answer": "Box no deeper than 28 cm",
+   "distractors": [
+    "Box no deeper than 34 cm",
+    "Box no deeper than 22 cm"
+   ]
+  },
+  {
+   "id": "c03",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with the 12-month warranty: in the beta data, scale-related failures peak around month 14, just after it expires.",
+    "I still object to the warranty length, scale failures peak at month 14 and we'd be leaving customers uncovered.",
+    "My concern stands, the scale failure peak is at month 14, which is outside a 12-month warranty.",
+    "For the record, I think the warranty is too short because scale failures cluster at month 14."
+   ],
+   "question": "What objection was raised about the warranty length?",
+   "answer": "Scale failures peak at month 14, after it expires",
+   "distractors": [
+    "Lid-seal failures peak at month 18, after it expires",
+    "Hinge failures peak at month 9, after it expires"
+   ]
+  },
+  {
+   "id": "c04",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Bad news from firmware: there's no rollback partition, and about 1 in 40 interrupted updates bricks the kettle.",
+    "The update path still has no fallback, so roughly 1 in 40 updates that get interrupted leave the unit bricked.",
+    "Again, if power drops mid-update, about 1 in 40 kettles end up bricked.",
+    "We re-ran it and it's still about 1 in 40 interrupted updates that brick the device."
+   ],
+   "question": "According to the meetings, how often does an interrupted firmware update brick the device?",
+   "answer": "About 1 in 40 interrupted updates",
+   "distractors": [
+    "About 1 in 400 interrupted updates",
+    "About 1 in 12 interrupted updates"
+   ]
+  },
+  {
+   "id": "c05",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "We can only ship to the EU once the radio module has been recertified at the test house in Tallinn.",
+    "EU shipments are still blocked until the Tallinn test house finishes recertifying the radio module.",
+    "Just to repeat, no EU units go out unless the radio recertification in Tallinn is done.",
+    "The precondition for EU shipping is still the radio module recertification at the Tallinn lab."
+   ],
+   "question": "Where must the radio module be recertified before EU shipments can start?",
+   "answer": "At the test house in Tallinn",
+   "distractors": [
+    "At the test house in Gdansk",
+    "At the test house in Brno"
+   ]
+  },
+  {
+   "id": "c06",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Our sole supplier just told us they're discontinuing the NTC temperature sensor we designed in.",
+    "The NTC temperature sensor is still being discontinued by our only source, and we have no second source.",
+    "Reminder that the NTC temperature sensor is going end-of-life at our single supplier.",
+    "Nothing new on the NTC temperature sensor, the supplier is still discontinuing it."
+   ],
+   "question": "According to the meetings, which component is the sole supplier discontinuing?",
+   "answer": "The NTC temperature sensor",
+   "distractors": [
+    "The base-plate relay",
+    "The power-cord grommet"
+   ]
+  },
+  {
+   "id": "c07",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I'm not comfortable with the '90-second boil' ad claim: it's only true for half a litre, 0.5 litres, so it's misleading.",
+    "I still object to the boil-time claim, it only holds for 0.5 litres of water and that's misleading.",
+    "My position hasn't changed, the fast-boil claim is only true at 0.5 litres and regulators will call it misleading.",
+    "For the record, the boil-time advert is misleading because it only works with 0.5 litres."
+   ],
+   "question": "What objection was raised against the boil-time claim in the advertising?",
+   "answer": "Only true for 0.5 litres, so it's misleading",
+   "distractors": [
+    "Only true at sea level, so it's misleading",
+    "Only true at 240 volts, so it's misleading"
+   ]
+  },
+  {
+   "id": "c08",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The launch budget only holds if the landed cost stays under 31 euros per unit.",
+    "Finance still needs the landed cost under 31 euros a unit, otherwise the margins don't work.",
+    "Again, everything assumes we keep landed cost below 31 euros per unit.",
+    "The business case still depends on a landed cost under 31 euros per unit."
+   ],
+   "question": "According to the meetings, what cost condition must hold for the launch budget to work?",
+   "answer": "Landed cost under 31 euros per unit",
+   "distractors": [
+    "Landed cost under 27 euros per unit",
+    "Landed cost under 38 euros per unit"
+   ]
+  },
+  {
+   "id": "c09",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Support is seeing app pairing fail on every router set to WPA3-only security.",
+    "Pairing still fails whenever the home router is WPA3-only.",
+    "Reminder, WPA3-only routers still can't pair with the kettle app.",
+    "We have more tickets about WPA3-only routers failing to pair, still no fix."
+   ],
+   "question": "According to the meetings, which router setup causes app pairing to fail?",
+   "answer": "Routers set to WPA3-only security",
+   "distractors": [
+    "Routers with hidden network names",
+    "Routers with MAC address filtering"
+   ]
+  },
+  {
+   "id": "c10",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The online partner gives us launch-day homepage placement only if we deliver 6,000 units to their Leeds warehouse first.",
+    "Launch-day placement still requires 6,000 units sitting in the Leeds warehouse beforehand.",
+    "Don't forget, no featured slot unless 6,000 units are in Leeds before launch.",
+    "Their condition is still 6,000 units delivered to Leeds for the homepage placement."
+   ],
+   "question": "How many units must be delivered to the partner's warehouse to get launch-day placement?",
+   "answer": "6,000 units",
+   "distractors": [
+    "4,500 units",
+    "8,000 units"
+   ]
+  },
+  {
+   "id": "c11",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with switching to the cheaper lid gasket: it left a plastic taste in 3 of 20 blind tests.",
+    "I still object to the cheaper gasket, 3 of 20 blind tasters noticed a plastic taste.",
+    "I'll repeat my objection, a plastic taste in 3 of 20 blind tests is not acceptable for a kettle.",
+    "For the record, the cheaper gasket gave a plastic taste in 3 of 20 blind tests, so I'm against it."
+   ],
+   "question": "Why did someone object to switching to the cheaper lid gasket?",
+   "answer": "Plastic taste in 3 of 20 blind tests",
+   "distractors": [
+    "Cracking in 3 of 20 drop tests",
+    "Leaking in 5 of 20 pressure tests"
+   ]
+  },
+  {
+   "id": "c12",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I object to shipping without a printed manual: 40% of beta testers never opened the app at all.",
+    "I still think dropping the printed manual is wrong, 40% of beta testers never opened the app.",
+    "My concern stands, with 40% of beta testers never opening the app, we need a paper manual.",
+    "For the record, 40% of the beta group never opened the app, so the printed manual has to stay."
+   ],
+   "question": "What reason was given for objecting to shipping without a printed manual?",
+   "answer": "40% of beta testers never opened the app",
+   "distractors": [
+    "35% of beta testers never scanned the QR code",
+    "55% of beta testers threw away the box insert"
+   ]
+  },
+  {
+   "id": "i01",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Unrelated, but the team lunch next week will be Ethiopian food.",
+    "We ordered Ethiopian food for next week's team lunch.",
+    "Next week's lunch is still Ethiopian, just so you know.",
+    "Reminder, it's Ethiopian food for the team lunch."
+   ],
+   "question": "What food is planned for the team lunch?",
+   "answer": "Ethiopian food",
+   "distractors": [
+    "Lebanese food",
+    "Peruvian food"
+   ]
+  },
+  {
+   "id": "i02",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "By the way, the daily stand-up has moved to room 3F.",
+    "The stand-up is in room 3F now.",
+    "Just a reminder the stand-up room is 3F.",
+    "We're still using room 3F for the stand-up."
+   ],
+   "question": "Which room is the daily stand-up held in?",
+   "answer": "Room 3F",
+   "distractors": [
+    "Room 5A",
+    "Room 1C"
+   ]
+  },
+  {
+   "id": "i03",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Random news: someone in the team adopted a parrot named Clementine.",
+    "The new office celebrity is Clementine, the parrot one of us adopted.",
+    "Clementine the parrot was on the video call again yesterday.",
+    "Someone asked how Clementine the parrot is settling in, and she's fine."
+   ],
+   "question": "What is the name of the parrot a team member adopted?",
+   "answer": "Clementine",
+   "distractors": [
+    "Juniper",
+    "Marmalade"
+   ]
+  },
+  {
+   "id": "i04",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The bike racks have been moved to the north entrance.",
+    "If you cycle in, the racks are at the north entrance now.",
+    "Bikes still go at the north entrance, not the old spot.",
+    "The north entrance is still where the bike racks are."
+   ],
+   "question": "Where have the bike racks been moved to?",
+   "answer": "The north entrance",
+   "distractors": [
+    "The east entrance",
+    "The loading dock"
+   ]
+  },
+  {
+   "id": "i05",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Off topic, but one of us is flying to Ljubljana for a cousin's wedding.",
+    "Have fun again at the wedding in Ljubljana.",
+    "The Ljubljana wedding plans are coming together, apparently.",
+    "Only a few weeks until that wedding in Ljubljana."
+   ],
+   "question": "In which city is the team member attending a wedding?",
+   "answer": "Ljubljana",
+   "distractors": [
+    "Zagreb",
+    "Bratislava"
+   ]
+  },
+  {
+   "id": "i06",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Facilities says the office fridge will be emptied every Wednesday evening.",
+    "The fridge gets cleared out on Wednesday evenings now, label your food.",
+    "Still Wednesday evening for the fridge clean-out.",
+    "Remember the fridge is emptied on Wednesday."
+   ],
+   "question": "On which day is the office fridge emptied?",
+   "answer": "Wednesday",
+   "distractors": [
+    "Monday",
+    "Thursday"
+   ]
+  },
+  {
+   "id": "i07",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The shared office playlist has been renamed 'Steam Room'.",
+    "You'll find the music under the playlist now called 'Steam Room'.",
+    "The playlist is still called 'Steam Room' after the rename.",
+    "Old links to the playlist break, it's 'Steam Room' now."
+   ],
+   "question": "What was the shared office playlist renamed to?",
+   "answer": "Steam Room",
+   "distractors": [
+    "Night Shift",
+    "Low Tide"
+   ]
+  },
+  {
+   "id": "i08",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Note that the building's front doors now lock at 8:15 pm.",
+    "The front doors lock at 8:15 pm, so don't stay too late.",
+    "Front doors still lock at 8:15 pm.",
+    "Remember the 8:15 pm lock time for the front doors."
+   ],
+   "question": "What time do the building's front doors lock?",
+   "answer": "8:15 pm",
+   "distractors": [
+    "7:30 pm",
+    "9:45 pm"
+   ]
+  },
+  {
+   "id": "i09",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "For the intern's birthday we're getting a carrot cake.",
+    "The birthday cake for the intern is carrot cake.",
+    "Still carrot cake for the intern's birthday, nobody objected.",
+    "The carrot cake for the intern's birthday is ordered."
+   ],
+   "question": "What cake is planned for the intern's birthday?",
+   "answer": "Carrot cake",
+   "distractors": [
+    "Lemon drizzle cake",
+    "Red velvet cake"
+   ]
+  },
+  {
+   "id": "i10",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Our pub quiz team is officially called The Quiet Ducks.",
+    "The Quiet Ducks came third at quiz night.",
+    "We're still entering the quiz as The Quiet Ducks.",
+    "Anyone can join The Quiet Ducks for the next quiz."
+   ],
+   "question": "What is the name of the team's pub quiz team?",
+   "answer": "The Quiet Ducks",
+   "distractors": [
+    "The Late Owls",
+    "The Odd Socks"
+   ]
+  },
+  {
+   "id": "i11",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Someone named the second-floor printer Gertrude.",
+    "Gertrude the printer jammed again this morning.",
+    "If you're printing, send it to Gertrude.",
+    "Gertrude is still the name on the printer."
+   ],
+   "question": "What nickname was given to the office printer?",
+   "answer": "Gertrude",
+   "distractors": [
+    "Bertha",
+    "Mildred"
+   ]
+  },
+  {
+   "id": "i12",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The summer offsite will be at a pottery studio this year.",
+    "The pottery studio is booked for the summer offsite.",
+    "Summer offsite is still at the pottery studio.",
+    "We confirmed the pottery studio for this year's offsite."
+   ],
+   "question": "Where will the summer offsite be held?",
+   "answer": "At a pottery studio",
+   "distractors": [
+    "At a climbing wall",
+    "At a cooking school"
+   ]
+  }
+ ],
+ "progress_template": "Launch-readiness update for week {session}: {a} open defects were closed and the production line yield is {b}%."
+}

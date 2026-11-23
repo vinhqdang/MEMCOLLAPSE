@@ -1,0 +1,453 @@
+{
+ "domain": "field_study_consortium",
+ "project": "Project Rhizo: a multi-university consortium planning a two-year field study of soil microbiomes on farms across three regions",
+ "majority_thread": [
+  "Overall the study design looks solid and we are on track to start fieldwork on schedule.",
+  "I'm comfortable with the plan; the partner universities are aligned and the protocol reads well.",
+  "Status is green from my side, the overall timeline still looks realistic.",
+  "The steering committee is happy with progress and wants to keep the current schedule.",
+  "Most of us agree the study is well scoped and we should proceed as planned.",
+  "The grant budget is tracking fine and the partners have been responsive, so let's keep moving.",
+  "I think we're aligned: proceed with the protocol and keep the timeline as it is.",
+  "No blockers from my side, the plan stays as it is."
+ ],
+ "filler": [
+  "Can everyone see my screen? Let me share the project board.",
+  "Sorry, I was on mute. Could you repeat the last point?",
+  "Let's quickly go around the partner sites for updates.",
+  "I'll circulate the minutes after the call.",
+  "We're a few minutes over, let's wrap up soon.",
+  "Thanks everyone, good discussion today.",
+  "I updated the task tracker this morning.",
+  "Let's park that and come back to it at the next consortium call.",
+  "Does anyone have anything else before we close?",
+  "I'll set up a follow-up call with the partner labs.",
+  "The progress chart looks about the same as last time.",
+  "I have a hard stop at the top of the hour.",
+  "Let me pull up the work-package overview slide.",
+  "Good point, let's capture that as an action item.",
+  "I'll check with my department and get back to you.",
+  "Same as last time, nothing new from my side."
+ ],
+ "speakers": [
+  "Ingrid (PI)",
+  "Mateo (field coordinator)",
+  "Yuki (lab manager)",
+  "Dev (statistician)",
+  "Amara (ethics officer)",
+  "Lena (data steward)",
+  "Kofi (postdoc)",
+  "Rosa (farm liaison)"
+ ],
+ "claims": [
+  {
+   "id": "c01",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Heads up: courier transit from the northern-region farms to the lab is taking 52 hours door to door.",
+    "I checked again and the northern-region shipments are still taking 52 hours to reach the lab.",
+    "Reminder that the courier needs 52 hours from the northern farms to our lab.",
+    "For the record, northern-region transit is still 52 hours, nothing has improved there."
+   ],
+   "question": "According to the meetings, how long does courier transit from the northern-region farms to the lab take?",
+   "answer": "52 hours",
+   "distractors": [
+    "30 hours",
+    "74 hours"
+   ]
+  },
+  {
+   "id": "c02",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Warning: extraction-kit lot KX-417 showed contamination in the blank controls.",
+    "The blanks from kit lot KX-417 are still coming up contaminated.",
+    "Again, please don't use lot KX-417, its blank controls were contaminated.",
+    "Lot KX-417 is still the one with contaminated blanks, that hasn't changed."
+   ],
+   "question": "According to the meetings, which extraction-kit lot showed contamination in the blank controls?",
+   "answer": "Lot KX-417",
+   "distractors": [
+    "Lot KX-392",
+    "Lot KX-455"
+   ]
+  },
+  {
+   "id": "c03",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Heads up, the moisture probes at the Redfern site read about 11 percent high.",
+    "The Redfern moisture probes are still reading roughly 11 percent high.",
+    "Just repeating that Redfern's probes overstate moisture by about 11 percent.",
+    "Nobody has recalibrated yet, so Redfern is still about 11 percent high on moisture."
+   ],
+   "question": "What calibration problem was reported for the moisture probes at the Redfern site?",
+   "answer": "They read about 11 percent high",
+   "distractors": [
+    "They read about 4 percent low",
+    "They read about 9 percent high"
+   ]
+  },
+  {
+   "id": "c04",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Be aware the sequencing core will be closed throughout February for an instrument upgrade.",
+    "The sequencing core is still planning to shut for all of February.",
+    "Again, nothing can be sequenced in February, the core is closed the whole month.",
+    "Confirmed once more: the core's February closure for the upgrade is going ahead."
+   ],
+   "question": "According to the meetings, when will the sequencing core be closed for an instrument upgrade?",
+   "answer": "Throughout February",
+   "distractors": [
+    "Throughout July",
+    "Throughout October"
+   ]
+  },
+  {
+   "id": "c05",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "We can sample the Tallow Creek farms only provided we avoid the four weeks after manure spreading.",
+    "Tallow Creek sampling has to stay clear of the four weeks after manure spreading.",
+    "Just to repeat, no Tallow Creek cores within four weeks of manure spreading.",
+    "The Tallow Creek condition still stands: wait four weeks after manure spreading."
+   ],
+   "question": "According to the meetings, what period must be avoided when sampling the Tallow Creek farms?",
+   "answer": "Four weeks after manure spreading",
+   "distractors": [
+    "Two weeks after ploughing",
+    "Six weeks after liming"
+   ]
+  },
+  {
+   "id": "c06",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The farmers agreed to public data release only after a 9-month embargo.",
+    "We still can't post the data to the public repository until the 9-month embargo ends.",
+    "Reminder, the farm agreements require a 9-month embargo before any public release.",
+    "Public release is conditional on the 9-month embargo, that's still the deal."
+   ],
+   "question": "Under what condition may the study data be posted to the public repository?",
+   "answer": "After a 9-month embargo",
+   "distractors": [
+    "After a 3-month embargo",
+    "After an 18-month embargo"
+   ]
+  },
+  {
+   "id": "c07",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The mixed model is only valid if we have at least 14 farms per region.",
+    "Statistically, we still need a minimum of 14 farms in each region or the model falls apart.",
+    "Again, anything under 14 farms per region and I can't defend the analysis.",
+    "My condition hasn't changed: at least 14 farms per region for the mixed model."
+   ],
+   "question": "What minimum sample size did the statistician require for the mixed model to be valid?",
+   "answer": "At least 14 farms per region",
+   "distractors": [
+    "At least 8 farms per region",
+    "At least 20 farms per region"
+   ]
+  },
+  {
+   "id": "c08",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "Ethics approval for the farmer interviews holds only if the consent forms are also provided in Portuguese.",
+    "The interview approval still depends on having Portuguese consent forms available.",
+    "Just to repeat, no interviews unless the consent forms exist in Portuguese as well.",
+    "For the record, the Portuguese version of the consent form is a condition of approval."
+   ],
+   "question": "Besides English, in what language must the consent forms be provided for the interview ethics approval to hold?",
+   "answer": "Portuguese",
+   "distractors": [
+    "Spanish",
+    "Polish"
+   ]
+  },
+  {
+   "id": "c09",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with pooling the cores from each plot, because pooling hides within-plot spatial variation.",
+    "I still object to pooling; it hides the spatial variation within each plot.",
+    "My concern stands, pooled cores will hide within-plot spatial variation.",
+    "For the record, I think pooling is a mistake since it hides spatial variation inside plots."
+   ],
+   "question": "What objection was raised against pooling the soil cores from each plot?",
+   "answer": "Pooling hides within-plot spatial variation",
+   "distractors": [
+    "It would double the lab workload",
+    "It complicates sample tracking"
+   ]
+  },
+  {
+   "id": "c10",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I'm against the September sampling round: it clashes with harvest, so farmers will refuse access.",
+    "September is still a bad idea, it clashes with harvest and farmers will refuse us access.",
+    "I'll repeat my objection: in September it's harvest, and farmers will refuse access.",
+    "My position hasn't changed, a September round clashes with harvest and access will be refused."
+   ],
+   "question": "Why did someone object to the September sampling round?",
+   "answer": "It clashes with harvest, so farmers will refuse access",
+   "distractors": [
+    "It overlaps the lab's annual safety audit",
+    "The field team is short-staffed that month"
+   ]
+  },
+  {
+   "id": "c11",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with storing raw data on the shared cloud drive; it would expose the farms' GPS coordinates.",
+    "I still object to the shared drive, the farms' GPS coordinates would be exposed.",
+    "Again, the cloud drive would expose farm GPS coordinates, I can't sign off on that.",
+    "My objection stands: putting raw data there exposes the farms' GPS coordinates."
+   ],
+   "question": "What objection was raised about storing raw data on the shared cloud drive?",
+   "answer": "It would expose the farms' GPS coordinates",
+   "distractors": [
+    "It would exceed the storage quota",
+    "It lacks proper version history"
+   ]
+  },
+  {
+   "id": "c12",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with dropping shotgun metagenomics, because 16S alone cannot resolve nitrogen-cycling genes.",
+    "I still think going 16S-only is wrong; it cannot resolve the nitrogen-cycling genes.",
+    "My concern stands, with just 16S we can't resolve nitrogen-cycling genes.",
+    "For the record, 16S alone won't resolve nitrogen-cycling genes, so keep the shotgun runs."
+   ],
+   "question": "Why did someone object to dropping shotgun metagenomics from the lab pipeline?",
+   "answer": "16S alone cannot resolve nitrogen-cycling genes",
+   "distractors": [
+    "16S alone cannot detect fungal pathogens",
+    "16S alone cannot distinguish live from dead cells"
+   ]
+  },
+  {
+   "id": "i01",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Unrelated, but the PI's new cat is called Turnip.",
+    "Turnip the cat made an appearance on the PI's camera again.",
+    "Someone asked how Turnip, the PI's cat, is settling in.",
+    "The PI's cat Turnip walked across the keyboard earlier."
+   ],
+   "question": "What is the name of the PI's new cat?",
+   "answer": "Turnip",
+   "distractors": [
+    "Parsnip",
+    "Pickle"
+   ]
+  },
+  {
+   "id": "i02",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The consortium mugs arrived, they're mustard yellow.",
+    "We've got a box of the mustard yellow mugs if anyone wants one.",
+    "Still a few mustard yellow consortium mugs left.",
+    "The mustard yellow mugs are in the kitchen now."
+   ],
+   "question": "What colour are the consortium mugs?",
+   "answer": "Mustard yellow",
+   "distractors": [
+    "Forest green",
+    "Navy blue"
+   ]
+  },
+  {
+   "id": "i03",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Off topic, the retreat dinner is booked at a Georgian restaurant.",
+    "The Georgian restaurant is confirmed for the retreat dinner.",
+    "Retreat dinner is still at that Georgian restaurant.",
+    "Reminder, we're eating at the Georgian restaurant during the retreat."
+   ],
+   "question": "Where is the retreat dinner booked?",
+   "answer": "A Georgian restaurant",
+   "distractors": [
+    "A Peruvian restaurant",
+    "A Moroccan restaurant"
+   ]
+  },
+  {
+   "id": "i04",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Fun fact, our postdoc has started learning the cello.",
+    "The cello lessons are going well, apparently.",
+    "Our postdoc still practices the cello every evening.",
+    "Someone asked about the cello again, there's a recital coming up."
+   ],
+   "question": "Which instrument has the postdoc started learning?",
+   "answer": "The cello",
+   "distractors": [
+    "The banjo",
+    "The oboe"
+   ]
+  },
+  {
+   "id": "i05",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The office plant has been officially named Captain Fern.",
+    "Captain Fern needs watering, by the way.",
+    "Captain Fern is still thriving on the windowsill.",
+    "Whoever is in tomorrow, please water Captain Fern."
+   ],
+   "question": "What is the shared office plant named?",
+   "answer": "Captain Fern",
+   "distractors": [
+    "Sir Leafalot",
+    "Professor Moss"
+   ]
+  },
+  {
+   "id": "i06",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "FYI the printer on level 2 is jammed again.",
+    "The level 2 printer is still out of action.",
+    "Use another printer, the one on level 2 is jammed.",
+    "Nobody has fixed the level 2 printer yet."
+   ],
+   "question": "On which level is the jammed printer?",
+   "answer": "Level 2",
+   "distractors": [
+    "Level 4",
+    "Level 6"
+   ]
+  },
+  {
+   "id": "i07",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Random news: the field coordinator bought a secondhand campervan.",
+    "The campervan the field coordinator bought is getting new tyres.",
+    "Apparently the secondhand campervan passed its inspection.",
+    "The field coordinator's campervan is parked outside again."
+   ],
+   "question": "What vehicle did the field coordinator buy secondhand?",
+   "answer": "A campervan",
+   "distractors": [
+    "A motorbike",
+    "A sailboat"
+   ]
+  },
+  {
+   "id": "i08",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The coffee club switched to beans from Rwanda.",
+    "We're on the Rwanda beans now for the coffee club.",
+    "The coffee club is still using the beans from Rwanda.",
+    "Reminder, the new coffee club beans are from Rwanda."
+   ],
+   "question": "Where are the coffee club's new beans from?",
+   "answer": "Rwanda",
+   "distractors": [
+    "Honduras",
+    "Kenya"
+   ]
+  },
+  {
+   "id": "i09",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "For the lab manager's birthday we're ordering a carrot cake.",
+    "The carrot cake for the lab manager's birthday is ordered.",
+    "Still carrot cake for the birthday, just confirming.",
+    "Don't forget the carrot cake pickup for the lab manager."
+   ],
+   "question": "What cake is being ordered for the lab manager's birthday?",
+   "answer": "Carrot cake",
+   "distractors": [
+    "Lemon drizzle cake",
+    "Black forest cake"
+   ]
+  },
+  {
+   "id": "i10",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The consortium newsletter now has a name: Loam Letter.",
+    "The next issue of Loam Letter goes out soon.",
+    "Loam Letter is still the newsletter title after the vote.",
+    "Please send items for Loam Letter by the end of the week."
+   ],
+   "question": "What is the consortium newsletter called?",
+   "answer": "Loam Letter",
+   "distractors": [
+    "Root Notes",
+    "Topsoil Times"
+   ]
+  },
+  {
+   "id": "i11",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Off topic, the statistician's band plays at the pub every second Thursday.",
+    "The band gig is still every second Thursday if anyone wants to come.",
+    "Every second Thursday is the band night, just so you know.",
+    "The statistician's band is on again on the second Thursday."
+   ],
+   "question": "How often does the statistician's band play at the pub?",
+   "answer": "Every second Thursday",
+   "distractors": [
+    "Every first Friday",
+    "Every last Sunday"
+   ]
+  },
+  {
+   "id": "i12",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The ethics officer is moving onto a houseboat next month.",
+    "The houseboat move is still on for the ethics officer.",
+    "Apparently the houseboat has a tiny wood stove.",
+    "The ethics officer sent photos of the houseboat again."
+   ],
+   "question": "What kind of home is the ethics officer moving into?",
+   "answer": "A houseboat",
+   "distractors": [
+    "A converted barn",
+    "A lighthouse cottage"
+   ]
+  }
+ ],
+ "progress_template": "Fieldwork update for month {session}: we logged {a} soil cores and the sequencing queue is {b}% processed."
+}

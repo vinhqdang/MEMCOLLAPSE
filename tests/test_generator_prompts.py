@@ -79,3 +79,18 @@ def test_clip_words():
     assert clip_words("a b c", 5) == ("a b c", 3)
     text, raw = clip_words("a b\nc d e\nf", 4)
     assert raw == 6 and len(text.split()) == 4 and text.startswith("a b\nc d")
+
+
+@pytest.mark.parametrize("name", ["heron", "city", "science", "product"])
+def test_every_bank_loads_and_builds(name):
+    from memcollapse.bank_checks import check_bank
+    path = Path(__file__).resolve().parents[1] / "data" / f"claims_{name}.json"
+    assert check_bank(path) == []
+    d = build_dialogue(load_bank(path), 0)
+    assert len(d.sessions) == 16 and len(d.claims) == 12
+
+
+def test_heron_progress_line_unchanged_for_reproducibility():
+    d = build_dialogue(BANK, 0, seed=0)
+    prog = [u.text for u in d.sessions[0] if u.tag == "progress"][0]
+    assert prog.startswith("Sprint 1 update: we closed ") and "pass rate" in prog

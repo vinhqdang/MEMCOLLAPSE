@@ -18,6 +18,8 @@ FREQ_LEVELS = (1, 2, 4)
 LAST_MENTION_CHOICES = (4, 5, 6, 7, 8)
 MAJORITY_PER_SESSION = 2
 FILLER_PER_SESSION = 3
+DEFAULT_PROGRESS = ("Sprint {session} update: we closed {a} tickets and the "
+                    "integration test pass rate is {b}%.")
 
 
 @dataclass(frozen=True)
@@ -39,6 +41,8 @@ class Bank:
     filler: tuple[str, ...]
     speakers: tuple[str, ...]
     claims: tuple[Claim, ...]
+    # per-session status line; {session}, {a} in [8,30], {b} in [80,99]
+    progress_template: str = DEFAULT_PROGRESS
 
 
 @dataclass(frozen=True)
@@ -71,6 +75,8 @@ class Dialogue:
     dialogue_id: str
     sessions: tuple[tuple[Utterance, ...], ...]  # index 0 == session 1
     claims: tuple[ClaimMeta, ...] = field(default_factory=tuple)
+    # optional pre-rendered (e.g. LLM-naturalised) session texts; overrides templated rendering
+    rendered: tuple[str, ...] = ()
 
 
 def load_bank(path: str | Path) -> Bank:
@@ -89,6 +95,7 @@ def load_bank(path: str | Path) -> Bank:
         domain=raw["domain"], project=raw["project"],
         majority_thread=tuple(raw["majority_thread"]), filler=tuple(raw["filler"]),
         speakers=tuple(raw["speakers"]), claims=claims,
+        progress_template=raw.get("progress_template", DEFAULT_PROGRESS),
     )
 
 
@@ -130,9 +137,10 @@ def select_claims(bank: Bank, d_idx: int, per_importance: int) -> list[tuple[Cla
     return chosen
 
 
-def _progress_line(rng: random.Random, session: int) -> str:
-    return (f"Sprint {session} update: we closed {rng.randint(8, 30)} tickets and the "
-            f"integration test pass rate is {rng.randint(80, 99)}%.")
+def _progress_line(rng: random.Random, session: int, template: str) -> str:
+    a = rng.randint(8, 30)
+    b = rng.randint(80, 99)
+    return template.format(session=session, a=a, b=b)
 
 
 def build_dialogue(bank: Bank, d_idx: int, n_sessions: int = 16,
@@ -159,7 +167,8 @@ def build_dialogue(bank: Bank, d_idx: int, n_sessions: int = 16,
             utts.append(Utterance(rng.choice(bank.speakers), line, "majority"))
         for line in rng.sample(bank.filler, FILLER_PER_SESSION):
             utts.append(Utterance(rng.choice(bank.speakers), line, "filler"))
-        utts.append(Utterance(bank.speakers[0], _progress_line(rng, s), "progress"))
+        utts.append(Utterance(bank.speakers[0], _progress_line(rng, s, bank.progress_template),
+                              "progress"))
         rng.shuffle(utts)
         sessions.append(tuple(utts))
     return Dialogue(dialogue_id=f"{bank.domain}-{schedule}-{seed}-{d_idx:04d}",
@@ -168,6 +177,8 @@ def build_dialogue(bank: Bank, d_idx: int, n_sessions: int = 16,
 
 def render_session(dialogue: Dialogue, s: int) -> str:
     """Render 1-based session s as a transcript."""
+    if dialogue.rendered:
+        return f"--- Meeting {s} ---\n{dialogue.rendered[s - 1]}"
     lines = [f"--- Meeting {s} ---"]
     lines += [f"{u.speaker}: {u.text}" for u in dialogue.sessions[s - 1]]
     return "\n".join(lines)

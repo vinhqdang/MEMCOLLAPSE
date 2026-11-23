@@ -29,10 +29,11 @@ def summarize(d: pd.DataFrame) -> None:
 
 
 def regress(d: pd.DataFrame) -> None:
-    post = d[(d.strategy == "rolling") & (d.since_last >= 0)].copy()
+    post = d[d.strategy.str.startswith("rolling") & (d.since_last >= 0)].copy()
     post["y"] = post.correct.astype(int)
     post["logf"] = post.freq.map({1: 0, 2: 1, 4: 2})
-    for (model, budget, imp), g in post.groupby(["model", "budget", "importance"]):
+    for (model, strat, budget, imp), g in post.groupby(["model", "strategy", "budget", "importance"]):
+        model = f"{model} {strat}"
         try:
             fit = smf.glm("y ~ logf + since_last + last + C(claim_id)", data=g,
                           family=__import__("statsmodels.api").api.families.Binomial()

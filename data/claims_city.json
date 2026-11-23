@@ -1,0 +1,453 @@
+{
+ "domain": "city_flood_barrier",
+ "project": "Riverside Resilience Scheme: a city council infrastructure committee deciding whether to build a riverside flood barrier and redesign the waterfront park",
+ "majority_thread": [
+  "Overall the barrier scheme looks sound and we are on track to go to full council as planned.",
+  "I'm comfortable with the design as it stands; the consultation feedback was broadly positive.",
+  "Status is green from my side, the programme for the barrier and the park still looks realistic.",
+  "The committee is happy with progress and wants to keep the current timetable.",
+  "Most of us agree the scheme is the right call and we should proceed as planned.",
+  "Funding is tracking fine and the contractors have been responsive, so let's keep moving.",
+  "I think we're aligned: build the barrier, redesign the park, and keep the schedule.",
+  "Nothing from my area that would hold things up, the plan stays as it is."
+ ],
+ "filler": [
+  "Can everyone see the site map? Let me share my screen.",
+  "Sorry, I was on mute. Could you repeat that last point?",
+  "Let's go around the table quickly for updates.",
+  "I'll circulate the minutes after the meeting.",
+  "We're running a few minutes over, let's wrap up soon.",
+  "Thanks everyone, useful discussion today.",
+  "I've updated the action tracker this morning.",
+  "Let's park that item and come back to it next time.",
+  "Does anyone have any other business before we close?",
+  "I'll set up a follow-up session with the design consultants.",
+  "The programme chart looks much the same as last time.",
+  "I have to leave at the top of the hour for another committee.",
+  "Let me bring up the riverside drawings again.",
+  "Good point, let's log that as an action.",
+  "I'll check with my department and come back to you.",
+  "Same as last time, nothing new from my side."
+ ],
+ "speakers": [
+  "Margaret (council chair)",
+  "Tobias (hydrologist)",
+  "Priyanka (city engineer)",
+  "Declan (residents' association rep)",
+  "Ruth (budget officer)",
+  "Femi (parks director)",
+  "Ingrid (legal counsel)",
+  "Kenji (environmental officer)"
+ ],
+ "claims": [
+  {
+   "id": "c01",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Heads up: the river gauge our design flood level is based on under-reads by 34 centimetres since it was recalibrated.",
+    "I checked again and that gauge is still under-reading by 34 centimetres, so the design level is too low.",
+    "Reminder that the gauge behind our design flood level reads 34 centimetres short.",
+    "For the record, the 34-centimetre under-read on the river gauge hasn't been corrected in the design."
+   ],
+   "question": "By how much does the river gauge used for the design flood level under-read?",
+   "answer": "34 centimetres",
+   "distractors": [
+    "18 centimetres",
+    "52 centimetres"
+   ]
+  },
+  {
+   "id": "c02",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "Watch out, the barrier foundations would sit right on top of a buried Victorian storm culvert under Tanner's Wharf.",
+    "That old storm culvert under Tanner's Wharf is still directly in the line of the barrier foundations.",
+    "Again, the survey shows the foundation route crossing the buried culvert under Tanner's Wharf.",
+    "Nothing has changed on the culvert under Tanner's Wharf; the foundations still clash with it."
+   ],
+   "question": "Where does the barrier foundation route cross a buried storm culvert?",
+   "answer": "Under Tanner's Wharf",
+   "distractors": [
+    "Under Brindle Quay",
+    "Under Saltmarsh Steps"
+   ]
+  },
+  {
+   "id": "c03",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "The temporary pumping station during construction can only shift 1.7 cubic metres per second, which won't cope with a wet winter.",
+    "Our temporary pumps are still rated at just 1.7 cubic metres per second during the works.",
+    "Just repeating that 1.7 cubic metres per second is all the temporary pumping can handle.",
+    "The contractor confirmed the temporary pumping capacity stays at 1.7 cubic metres per second."
+   ],
+   "question": "What capacity was given for the temporary pumping station during construction?",
+   "answer": "1.7 cubic metres per second",
+   "distractors": [
+    "4.2 cubic metres per second",
+    "2.6 cubic metres per second"
+   ]
+  },
+  {
+   "id": "c04",
+   "type": "warning",
+   "importance": "critical",
+   "mentions": [
+    "When the barrier gates close, the Pell Street sewer outfall will back up straight into the park.",
+    "The modelling still shows the Pell Street sewer outfall backing up whenever the gates are shut.",
+    "Again, closing the gates makes the Pell Street sewer outfall surcharge into the park.",
+    "The Pell Street sewer outfall backing up with the gates closed is still unresolved."
+   ],
+   "question": "Which outfall was said to back up when the barrier gates close?",
+   "answer": "The Pell Street sewer outfall",
+   "distractors": [
+    "The Kestrel Road sewer outfall",
+    "The Orchard Lane sewer outfall"
+   ]
+  },
+  {
+   "id": "c05",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The regional resilience grant only pays out if construction starts before 9 October.",
+    "We lose the resilience grant unless we're on site before 9 October.",
+    "Don't forget, the grant money depends on starting construction before 9 October.",
+    "Still the same condition on the grant: works have to begin before 9 October."
+   ],
+   "question": "By what date must construction start for the resilience grant to pay out?",
+   "answer": "Before 9 October",
+   "distractors": [
+    "Before 4 August",
+    "Before 21 November"
+   ]
+  },
+  {
+   "id": "c06",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "In-river piling is only allowed provided an independent fish-passage observer is on site the whole time.",
+    "We can't pile in the river unless an independent fish-passage observer is present.",
+    "Just to repeat, no piling without an independent fish-passage observer on site.",
+    "The piling consent still hinges on having an independent fish-passage observer there."
+   ],
+   "question": "Who must be on site for in-river piling to be allowed?",
+   "answer": "An independent fish-passage observer",
+   "distractors": [
+    "A licensed structural inspector",
+    "A county archaeology officer"
+   ]
+  },
+  {
+   "id": "c07",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "The bandstand can stay in the park redesign only if it's raised 1.2 metres onto a plinth.",
+    "Keeping the bandstand is fine provided we lift it 1.2 metres onto a plinth.",
+    "Reminder: the bandstand survives the redesign only on a plinth 1.2 metres up.",
+    "The condition for keeping the bandstand is still raising it 1.2 metres onto a plinth."
+   ],
+   "question": "Under what condition can the bandstand be kept in the park redesign?",
+   "answer": "It is raised 1.2 metres onto a plinth",
+   "distractors": [
+    "It is moved behind the floodwall",
+    "It is rebuilt in lightweight timber"
+   ]
+  },
+  {
+   "id": "c08",
+   "type": "condition",
+   "importance": "critical",
+   "mentions": [
+    "Compulsory purchase of the boatyard plots is only lawful if we first offer the tenants an alternative berth at Coldharbour Basin.",
+    "We can't compulsorily purchase the boatyard unless the tenants get offered an alternative berth at Coldharbour Basin.",
+    "Again, the offer of an alternative berth at Coldharbour Basin has to come before any compulsory purchase.",
+    "The compulsory purchase still depends on offering the boatyard tenants a berth at Coldharbour Basin first."
+   ],
+   "question": "What must the council offer the boatyard tenants before compulsory purchase is lawful?",
+   "answer": "An alternative berth at Coldharbour Basin",
+   "distractors": [
+    "An alternative berth at Netherby Marina",
+    "An alternative berth at Linfield Creek"
+   ]
+  },
+  {
+   "id": "c09",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I disagree with closing the Ferry Steps path: wheelchair users would lose the only step-free river access.",
+    "I still object to shutting Ferry Steps, it's the only step-free river access for wheelchair users.",
+    "My concern stands, closing Ferry Steps takes away the only step-free access to the river for wheelchair users.",
+    "For the record, I oppose closing the Ferry Steps path because wheelchair users lose their only step-free river access."
+   ],
+   "question": "What objection was raised about closing the Ferry Steps path?",
+   "answer": "Wheelchair users lose the only step-free river access",
+   "distractors": [
+    "Anglers lose their licensed fishing pitches",
+    "Rowing clubs lose their launch point"
+   ]
+  },
+  {
+   "id": "c10",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I object to funding the barrier from the library capital programme, because that money is legally ring-fenced.",
+    "I still don't accept raiding the library capital budget; it's ring-fenced by law.",
+    "I'll repeat my objection: the library capital money is legally ring-fenced, so it can't pay for the barrier.",
+    "My position hasn't changed, we can't use library capital money for this, it's legally ring-fenced."
+   ],
+   "question": "Why did someone object to the proposed funding source for the barrier?",
+   "answer": "Library capital money is legally ring-fenced",
+   "distractors": [
+    "Bond interest rates are rising sharply",
+    "The parking reserve is already committed"
+   ]
+  },
+  {
+   "id": "c11",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I'm not convinced the 1-in-100-year standard is enough, because the upstream Harrowmere reservoir spillway was lowered.",
+    "With the Harrowmere reservoir spillway lowered, I still think the 1-in-100-year design is inadequate.",
+    "Again, I disagree with the design standard: the Harrowmere spillway upstream has been lowered.",
+    "For the record, the lowered Harrowmere reservoir spillway is why I reject the 1-in-100-year standard."
+   ],
+   "question": "What reason was given for objecting to the 1-in-100-year design standard?",
+   "answer": "The upstream Harrowmere reservoir spillway was lowered",
+   "distractors": [
+    "The downstream tidal range has widened",
+    "The river channel has silted badly"
+   ]
+  },
+  {
+   "id": "c12",
+   "type": "dissent",
+   "importance": "critical",
+   "mentions": [
+    "I oppose felling the riverside willows, they host a Daubenton's bat roost.",
+    "I still object to cutting down those willows because of the Daubenton's bat roost in them.",
+    "My view hasn't changed: the willows host a Daubenton's bat roost and should stay.",
+    "For the record, felling the willows would destroy a Daubenton's bat roost, so I'm against it."
+   ],
+   "question": "Why did someone object to felling the riverside willows?",
+   "answer": "They host a Daubenton's bat roost",
+   "distractors": [
+    "They host a kingfisher nesting site",
+    "They host a water vole colony"
+   ]
+  },
+  {
+   "id": "i01",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Unrelated, but the canteen soup on Wednesday is parsnip.",
+    "Wednesday's canteen soup is parsnip again this week.",
+    "Just so you know, it's still parsnip soup on Wednesdays.",
+    "Someone asked, and yes, Wednesday soup is parsnip."
+   ],
+   "question": "What soup does the canteen serve on Wednesday?",
+   "answer": "Parsnip soup",
+   "distractors": [
+    "Leek soup",
+    "Lentil soup"
+   ]
+  },
+  {
+   "id": "i02",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "By the way, the committee now meets in the Oriel Room.",
+    "We're in the Oriel Room from now on for these meetings.",
+    "Just a reminder that we've moved to the Oriel Room.",
+    "We're still using the Oriel Room for the committee."
+   ],
+   "question": "Which room does the committee now meet in?",
+   "answer": "The Oriel Room",
+   "distractors": [
+    "The Mercer Room",
+    "The Granary Room"
+   ]
+  },
+  {
+   "id": "i03",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Random news: one of the planning officers adopted a cat called Juniper.",
+    "Juniper, the planning officer's new cat, apparently sleeps on the printer at home.",
+    "Juniper the cat made a video-call appearance again yesterday.",
+    "Someone asked after the planning officer's cat, Juniper, who is settling in well."
+   ],
+   "question": "What is the name of the cat one of the planning officers adopted?",
+   "answer": "Juniper",
+   "distractors": [
+    "Clover",
+    "Pickle"
+   ]
+  },
+  {
+   "id": "i04",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The staff quiz night theme this year is shipwrecks.",
+    "Start revising, the quiz theme is shipwrecks.",
+    "The quiz is still shipwrecks-themed, apparently.",
+    "Reminder that the staff quiz night is all about shipwrecks."
+   ],
+   "question": "What is the theme of the staff quiz night?",
+   "answer": "Shipwrecks",
+   "distractors": [
+    "Volcanoes",
+    "Board games"
+   ]
+  },
+  {
+   "id": "i05",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "FYI the lift in the east wing is out of service.",
+    "The east wing lift is still broken.",
+    "Take the stairs, the east wing lift hasn't been fixed.",
+    "Nobody has repaired the lift in the east wing yet."
+   ],
+   "question": "In which part of the building is the broken lift?",
+   "answer": "The east wing",
+   "distractors": [
+    "The north wing",
+    "The south wing"
+   ]
+  },
+  {
+   "id": "i06",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "Off topic, but one of the clerks is cycling to Bruges for charity next month.",
+    "Good luck again with the charity ride to Bruges.",
+    "The training for the Bruges charity ride is going well, apparently.",
+    "Only a few weeks to go until that cycle to Bruges."
+   ],
+   "question": "To which city is the clerk cycling for charity?",
+   "answer": "Bruges",
+   "distractors": [
+    "Ghent",
+    "Lille"
+   ]
+  },
+  {
+   "id": "i07",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The new staff lanyards are mustard yellow.",
+    "Has everyone got their mustard yellow lanyard yet?",
+    "The lanyards are still that mustard yellow colour.",
+    "Wear the mustard yellow lanyards at reception from now on."
+   ],
+   "question": "What colour are the new staff lanyards?",
+   "answer": "Mustard yellow",
+   "distractors": [
+    "Brick red",
+    "Slate grey"
+   ]
+  },
+  {
+   "id": "i08",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The office bake-off was won by a rhubarb tart.",
+    "That winning rhubarb tart from the bake-off was excellent.",
+    "People are still talking about the rhubarb tart that won the bake-off.",
+    "Someone wants the recipe for the bake-off rhubarb tart."
+   ],
+   "question": "What won the office bake-off?",
+   "answer": "A rhubarb tart",
+   "distractors": [
+    "A plum tart",
+    "A pear tart"
+   ]
+  },
+  {
+   "id": "i09",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The staff car-share scheme starts on 6 February.",
+    "Sign up before the car-share scheme launches on 6 February.",
+    "Car-share is still starting 6 February.",
+    "Remember the 6 February start for the car-share scheme."
+   ],
+   "question": "When does the staff car-share scheme start?",
+   "answer": "6 February",
+   "distractors": [
+    "13 February",
+    "27 February"
+   ]
+  },
+  {
+   "id": "i10",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The cactus on the reception desk has been named Admiral.",
+    "Admiral the reception cactus has a new pot.",
+    "Someone watered Admiral, the cactus, a bit too much.",
+    "Admiral is still thriving on the reception desk."
+   ],
+   "question": "What name was given to the cactus on the reception desk?",
+   "answer": "Admiral",
+   "distractors": [
+    "Captain",
+    "Major"
+   ]
+  },
+  {
+   "id": "i11",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The retirement card for the receptionist is in the post room.",
+    "Sign the receptionist's leaving card, it's in the post room.",
+    "The card is still in the post room if you haven't signed it.",
+    "Last chance, the receptionist's card leaves the post room on Friday."
+   ],
+   "question": "Where is the receptionist's retirement card kept for signing?",
+   "answer": "The post room",
+   "distractors": [
+    "The print room",
+    "The staff kitchen"
+   ]
+  },
+  {
+   "id": "i12",
+   "type": "incidental",
+   "importance": "incidental",
+   "mentions": [
+    "The council five-a-side team has renamed itself The Sandbags.",
+    "The Sandbags won their five-a-side match on Tuesday.",
+    "Our five-a-side team is still called The Sandbags.",
+    "Anyone can join The Sandbags for five-a-side on Tuesdays."
+   ],
+   "question": "What is the council five-a-side team called?",
+   "answer": "The Sandbags",
+   "distractors": [
+    "The Floodlights",
+    "The Lock Keepers"
+   ]
+  }
+ ],
+ "progress_template": "Construction-readiness update for week {session}: {a} design drawings were signed off and the permit dossier is {b}% complete."
+}
