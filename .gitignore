@@ -224,3 +224,4 @@ __marimo__/
 
 # experiment scratch
 results/smoke/
+results/pilot/probes_*.jsonl
