@@ -23,6 +23,10 @@ from memcollapse.llm import HFModel  # noqa: E402
 from memcollapse.runner import probe_all, save_records  # noqa: E402
 
 
+def dialogue_index(dialogue_id: str) -> int:
+    return int(dialogue_id.rsplit("-", 1)[1])
+
+
 def load_memories(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
 
@@ -35,6 +39,7 @@ def main() -> None:
     ap.add_argument("--sessions", type=int, default=16)
     ap.add_argument("--schedule", choices=["spread", "clustered"], default="spread")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--4bit", dest="four_bit", action="store_true")
     ap.add_argument("--batch-size", type=int, default=12)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
@@ -42,11 +47,12 @@ def main() -> None:
 
     bank = load_bank(args.bank)
     recs = load_memories(Path(args.memories))
-    n = 1 + max(int(r["dialogue_id"].rsplit("-", 1)[1]) for r in recs)
-    by_id = {d.dialogue_id: d for d in (build_dialogue(bank, i, n_sessions=args.sessions,
-                                                        seed=args.seed, schedule=args.schedule)
-                                         for i in range(n))}
-    reader = HFModel(args.reader)
+    # match by dialogue index: pilot-era ids lack the schedule tag ("<domain>-<seed>-<idx>")
+    n = 1 + max(dialogue_index(r["dialogue_id"]) for r in recs)
+    built = [build_dialogue(bank, i, n_sessions=args.sessions, seed=args.seed,
+                            schedule=args.schedule) for i in range(n)]
+    by_id = {r["dialogue_id"]: built[dialogue_index(r["dialogue_id"])] for r in recs}
+    reader = HFModel(args.reader, load_in_4bit=args.four_bit)
     out = Path(args.out)
     out.unlink(missing_ok=True)
     for budget in sorted({r["budget"] for r in recs}):

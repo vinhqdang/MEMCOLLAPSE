@@ -28,6 +28,7 @@ def main() -> None:
     ap.add_argument("--sessions", type=int, default=16)
     ap.add_argument("--schedule", choices=["spread", "clustered"], default="spread")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--4bit", dest="four_bit", action="store_true")
     ap.add_argument("--batch-size", type=int, default=16)
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
@@ -36,7 +37,7 @@ def main() -> None:
     bank = load_bank(args.bank)
     dialogues = [build_dialogue(bank, i, n_sessions=args.sessions, seed=args.seed,
                                 schedule=args.schedule) for i in range(args.n)]
-    model = HFModel(args.model)
+    model = HFModel(args.model, load_in_4bit=args.four_bit)
     rendered, stats = naturalize(model, bank, dialogues, args.batch_size)
     out = Path(args.out)
     save_rendered(rendered, out)
