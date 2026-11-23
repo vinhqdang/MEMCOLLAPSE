@@ -41,3 +41,20 @@ yet still loses ~60% of single-mention critical claims by session 16. Phi-3.5 is
 2. Probe uses the summariser model as reader -> add a fixed external reader.
 3. Decision-impact metric (does erasure flip downstream decisions?) not yet measured.
 4. Method: importance/provenance-aware compression vs Compaction-Cliff typing and ACE at equal budget.
+
+## 5. Full-context DiD control (2026-11-24, `scripts/analyze_bench.py`)
+The full-transcript condition is not perfectly flat in frequency (more paraphrases in context
+make the MCQ easier), so the summarisation-specific effect is the logf x rolling interaction
+against full context at shared checkpoints, on the probability scale (logit DiD is unstable
+near the full-context ceiling; gemma separates).
+
+Heron, B=160, prob-scale slope per doubling of frequency (full -> rolling, DiD p):
+- Qwen2.5-1.5B critical +0.006 -> +0.272 (p=4e-19); incidental +0.036 -> +0.219 (p=7e-10)
+- Qwen2.5-7B   critical +0.019 -> +0.185 (p=2e-5);  incidental +0.021 -> +0.116 (p=1e-4)
+- Phi-3.5      critical n.s.; incidental +0.016 -> +0.133 (p=0.003)
+- gemma-4-E4B  n.s. (importance-driven retention; incidental nearly all erased)
+
+Phi-3.5 on city/science/product (pooled, 3 domains): full-context slope ~+0.077 (critical) and
+rolling slope smaller (+0.02/+0.04) -> no summarisation-specific frequency effect; Phi erases
+most claims regardless (retention rolling/full 0.14-0.38). The frequency effect is therefore
+model-dependent: strong in the Qwen family, weak/absent in Phi, superseded by importance in gemma.
