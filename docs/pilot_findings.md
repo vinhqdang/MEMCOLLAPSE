@@ -28,7 +28,8 @@ for incidental claims in 6/8 (gemma: n.s.).
 
 ## 3. Frequency vs. first-mention confound (clustered schedule, mentions in [L-f+1, L])
 Qwen2.5-1.5B: beta_logf = 0.78 / 0.66 (B=80, crit/incid), 1.30 / 1.79 (B=160); all p <= 0.013.
-The effect survives when repeated mentions are not introduced earlier. (Phi B=160 rerun pending.)
+Phi-3.5-mini (critical): beta_logf = 0.37 (p=0.010, B=80), 0.39 (p=0.017, B=160); incidental 0.23 (n.s.) / 0.40 (p=0.012).
+The effect survives in both models when repeated mentions are not introduced earlier.
 
 ## 4. Importance sensitivity differs by model
 gemma-4-E4B keeps critical claims far more than incidental (0.64 vs 0.10 post-last-mention, B=160),

@@ -12,13 +12,20 @@ log = logging.getLogger(__name__)
 
 
 class HFModel:
-    def __init__(self, name: str, dtype: torch.dtype = torch.bfloat16, device: str = "cuda"):
+    def __init__(self, name: str, dtype: torch.dtype = torch.bfloat16, device: str = "cuda",
+                 load_in_4bit: bool = False):
         self.name = name
         self.tok = AutoTokenizer.from_pretrained(name)
         self.tok.padding_side = "left"
         if self.tok.pad_token is None:
             self.tok.pad_token = self.tok.eos_token
-        self.model = AutoModelForCausalLM.from_pretrained(name, dtype=dtype, device_map=device)
+        kwargs = {"dtype": dtype, "device_map": device}
+        if load_in_4bit:
+            from transformers import BitsAndBytesConfig
+            kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=dtype)
+            self.name = f"{name}@nf4"
+        self.model = AutoModelForCausalLM.from_pretrained(name, **kwargs)
         self.model.eval()
         self.letter_ids = [self._single_token_id(L) for L in LETTERS]
 

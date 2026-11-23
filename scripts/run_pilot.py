@@ -39,6 +39,8 @@ def main() -> None:
     ap.add_argument("--name", default=None, help="tag added to output filenames")
     ap.add_argument("--dtype", choices=["bfloat16", "float16"], default="bfloat16",
                     help="float16 for GPUs without native bf16 (e.g. T4)")
+    ap.add_argument("--4bit", dest="four_bit", action="store_true",
+                    help="NF4 quantisation (bitsandbytes) to fit 7-8B models in 16 GB")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -49,7 +51,9 @@ def main() -> None:
                                 schedule=args.schedule) for i in range(args.n)]
     if args.rendered:
         dialogues = load_rendered(dialogues, Path(args.rendered))
-    model = HFModel(args.model, dtype=getattr(torch, args.dtype))
+    model = HFModel(args.model, dtype=getattr(torch, args.dtype), load_in_4bit=args.four_bit)
+    if args.four_bit:
+        tag = f"{tag}-nf4"
     probes_path, mem_path = out / f"probes_{tag}.jsonl", out / f"memories_{tag}.jsonl"
     for p in (probes_path, mem_path):
         p.unlink(missing_ok=True)
