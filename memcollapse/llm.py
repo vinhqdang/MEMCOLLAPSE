@@ -53,7 +53,8 @@ class HFModel:
         res: list[list[float]] = []
         for i in range(0, len(batch_messages), batch_size):
             enc = self._encode(batch_messages[i:i + batch_size])
-            logits = self.model(**enc).logits[:, -1, :].float()
+            # only the last position is needed; avoids a [B, L, |V|] tensor (OOM for big vocabs)
+            logits = self.model(**enc, logits_to_keep=1).logits[:, -1, :].float()
             sub = torch.log_softmax(logits[:, self.letter_ids], dim=-1)
             res += sub.cpu().tolist()
         return res
