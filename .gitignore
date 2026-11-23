@@ -227,3 +227,5 @@ results/smoke/
 results/pilot/probes_*.jsonl
 results/colab_dl/
 results/clustered*/probes_*.jsonl
+results/bench/probes_*.jsonl
+results/natural/probes_*.jsonl
