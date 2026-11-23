@@ -10,6 +10,8 @@ import logging
 import sys
 from pathlib import Path
 
+import torch
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
@@ -35,6 +37,8 @@ def main() -> None:
     ap.add_argument("--rendered", default=None,
                     help="JSONL of naturalised sessions (from scripts/naturalize_dialogues.py)")
     ap.add_argument("--name", default=None, help="tag added to output filenames")
+    ap.add_argument("--dtype", choices=["bfloat16", "float16"], default="bfloat16",
+                    help="float16 for GPUs without native bf16 (e.g. T4)")
     args = ap.parse_args()
 
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
@@ -45,7 +49,7 @@ def main() -> None:
                                 schedule=args.schedule) for i in range(args.n)]
     if args.rendered:
         dialogues = load_rendered(dialogues, Path(args.rendered))
-    model = HFModel(args.model)
+    model = HFModel(args.model, dtype=getattr(torch, args.dtype))
     probes_path, mem_path = out / f"probes_{tag}.jsonl", out / f"memories_{tag}.jsonl"
     for p in (probes_path, mem_path):
         p.unlink(missing_ok=True)
