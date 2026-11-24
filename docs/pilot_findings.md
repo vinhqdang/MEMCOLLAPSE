@@ -64,3 +64,8 @@ rolling slope +0.160; DiD critical +0.147 (p=2e-15), incidental +0.154 (p=1e-21)
 Per domain DiD (critical / incidental, B=160): city +0.10 / +0.12, science +0.15 / +0.19,
 product +0.19 / +0.15, all p<=0.002. Single-mention claims retain 4-22% of full-context
 accuracy vs 36-53% at f=4. B=80: summaries erase nearly everything (DiD small/n.s. for critical).
+
+Qwen2.5-7B (NF4) B=160, DiD critical / incidental: Heron +0.105 (p=0.002) / +0.127 (p=2e-5);
+city+science+product pooled +0.034 (p=0.03) / +0.003 (n.s.). Weaker cross-domain than Qwen-1.5B.
+Quantisation check (Heron, bf16 vs NF4): Qwen-7B DiD crit +0.166 vs +0.105, incid +0.095 vs +0.127;
+gemma n.s. in both, critical retention 0.6 vs 0.5-0.6, incidental ~0.1 in both -> conclusions unchanged.
