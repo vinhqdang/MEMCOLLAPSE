@@ -58,3 +58,9 @@ Phi-3.5 on city/science/product (pooled, 3 domains): full-context slope ~+0.077 
 rolling slope smaller (+0.02/+0.04) -> no summarisation-specific frequency effect; Phi erases
 most claims regardless (retention rolling/full 0.14-0.38). The frequency effect is therefore
 model-dependent: strong in the Qwen family, weak/absent in Phi, superseded by importance in gemma.
+
+Qwen2.5-1.5B on city/science/product (pooled, B=160): full-context flat (slope +0.006..+0.013);
+rolling slope +0.160; DiD critical +0.147 (p=2e-15), incidental +0.154 (p=1e-21).
+Per domain DiD (critical / incidental, B=160): city +0.10 / +0.12, science +0.15 / +0.19,
+product +0.19 / +0.15, all p<=0.002. Single-mention claims retain 4-22% of full-context
+accuracy vs 36-53% at f=4. B=80: summaries erase nearly everything (DiD small/n.s. for critical).
