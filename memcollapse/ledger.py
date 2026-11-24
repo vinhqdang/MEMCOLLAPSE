@@ -14,14 +14,17 @@ word budget is a deterministic policy:
 from __future__ import annotations
 
 import re
+import zlib
 from dataclasses import dataclass, replace
 
 TYPES = ("warning", "condition", "dissent", "decision", "status", "other")
 PROTECTED_TYPES = frozenset({"warning", "condition", "dissent", "decision"})
 POLICIES = ("protected", "support", "recency")
 
-_BULLET = re.compile(r"^\s*(?:[-*•]|\d+[.)])\s*")
-_SAME = re.compile(r"^SAME\s*\|\s*(\d+)\s*$", re.IGNORECASE)
+_BULLET = re.compile(r"^\s*(?:[-*•]\s*|\d+[.)]\s+)")  # "2.5 million" is not a bullet
+_HAS_BULLET = re.compile(r"^\s*[-*•]")
+_SAME = re.compile(r"^SAME\s*\|\s*#?(\d+)\b", re.IGNORECASE)  # tolerates "SAME | 3." / "| 3 | ..."
+_SAME_LIKE = re.compile(r"^SAME\s*\|", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -47,7 +50,7 @@ def parse_delta(output: str, n_existing: int, typed: bool = True
     same: list[int] = []
     bad = 0
     for raw in output.splitlines():
-        line = _BULLET.sub("", raw).strip()
+        line = _BULLET.sub("", raw.replace("**", "")).strip()
         if not line:
             continue
         m = _SAME.match(line)
@@ -58,10 +61,13 @@ def parse_delta(output: str, n_existing: int, typed: bool = True
             else:
                 bad += 1
             continue
-        if line.upper().startswith("SAME"):  # malformed restatement, never a note
+        if _SAME_LIKE.match(line):  # malformed restatement, never a note
             bad += 1
             continue
         if not typed:
+            if not _HAS_BULLET.match(raw.replace("**", "")):  # preambles like "Here are the new notes:"
+                bad += 1
+                continue
             new.append(Item(text=line, type="other", speaker="", sessions=()))
             continue
         parts = [p.strip() for p in line.split("|")]
@@ -113,13 +119,18 @@ def render_numbered(ledger: tuple[Item, ...], provenance: bool) -> str:
     return "\n".join(f"{k}. {render_item(it, provenance)[2:]}" for k, it in enumerate(ledger, 1))
 
 
+def _tiebreak(item: Item) -> int:
+    """Content hash: items added in the same session are not ranked by output position."""
+    return zlib.crc32(_norm(item.text).encode())
+
+
 def _eviction_key(policy: str, k: int, item: Item) -> tuple:
     if policy == "protected":
-        return (item.type in PROTECTED_TYPES, item.last, k)
+        return (item.type in PROTECTED_TYPES, item.last, _tiebreak(item), k)
     if policy == "support":
-        return (len(item.sessions), item.last, k)
+        return (len(item.sessions), item.last, _tiebreak(item), k)
     if policy == "recency":
-        return (item.last, k)
+        return (item.last, _tiebreak(item), k)
     raise ValueError(f"unknown policy {policy!r}; expected one of {POLICIES}")
 
 

@@ -15,10 +15,12 @@ Itemised family (the model only proposes deltas; code keeps items verbatim, see 
 from __future__ import annotations
 
 import logging
+from collections import Counter
 from dataclasses import dataclass
 
 from .generator import Bank, Dialogue, render_session
-from .ledger import Item, apply_delta, enforce_budget, parse_delta, render, render_numbered
+from .ledger import (PROTECTED_TYPES, Item, apply_delta, enforce_budget, parse_delta, render,
+                     render_numbered)
 from .llm import HFModel
 from .prompts import EMPTY_MEMORY, UPDATE_SYSTEM, clip_words
 
@@ -97,6 +99,8 @@ def _messages(user: str) -> list[dict]:
 def summary_memories(model: HFModel, bank: Bank, dialogues: list[Dialogue], budget: int,
                      batch_size: int, template: str) -> list[list[tuple[str, int]]]:
     T = len(dialogues[0].sessions)
+    if any(len(d.sessions) != T for d in dialogues):
+        raise ValueError("all dialogues must have the same number of sessions")
     current = ["" for _ in dialogues]
     history: list[list[tuple[str, int]]] = [[] for _ in dialogues]
     for t in range(1, T + 1):
@@ -118,28 +122,55 @@ def itemised_memories(model: HFModel, bank: Bank, dialogues: list[Dialogue], bud
                       ) -> tuple[list[list[tuple[str, int]]], dict[str, int]]:
     """Returns per-dialogue (rendered memory, pre-eviction words) and parse statistics."""
     T = len(dialogues[0].sessions)
+    if any(len(d.sessions) != T for d in dialogues):
+        raise ValueError("all dialogues must have the same number of sessions")
     ledgers: list[tuple[Item, ...]] = [() for _ in dialogues]
     history: list[list[tuple[str, int]]] = [[] for _ in dialogues]
-    stats = {"lines_new": 0, "lines_same": 0, "lines_bad": 0, "evicted": 0}
+    stats: dict = {"lines_new": 0, "lines_dup": 0, "lines_same": 0, "lines_bad": 0,
+                   "truncated_outputs": 0, "evicted": 0, "evicted_protected": 0,
+                   "empty_ledgers": 0, "kept_items_final": 0, "kept_types_final": {},
+                   "bad_per_session": []}
     for t in range(1, T + 1):
         msgs = [_messages(cfg.template.format(
             project=bank.project, t=t, session=render_session(d, t),
             memory=render_numbered(ledgers[i], cfg.provenance) or EMPTY_MEMORY))
             for i, d in enumerate(dialogues)]
         outs = model.generate(msgs, max_new_tokens=DELTA_MAX_TOKENS, batch_size=batch_size)
+        bad_t = 0
         for i, o in enumerate(outs):
+            if _hit_token_cap(model, o):  # last line may be cut mid-claim: drop it
+                o = "\n".join(o.splitlines()[:-1])
+                stats["truncated_outputs"] += 1
             new, same, bad = parse_delta(o, n_existing=len(ledgers[i]), typed=cfg.typed)
             grown = apply_delta(ledgers[i], new, same, session=t)
             kept = enforce_budget(grown, budget, cfg.policy, cfg.provenance)
-            stats["lines_new"] += len(new)
+            kept_ids = {id(it) for it in kept}
+            gone = [it for it in grown if id(it) not in kept_ids]
+            stats["lines_new"] += len(grown) - len(ledgers[i])
+            stats["lines_dup"] += len(new) - (len(grown) - len(ledgers[i]))
             stats["lines_same"] += len(same)
             stats["lines_bad"] += bad
-            stats["evicted"] += len(grown) - len(kept)
+            stats["evicted"] += len(gone)
+            stats["evicted_protected"] += sum(it.type in PROTECTED_TYPES for it in gone)
+            stats["empty_ledgers"] += not kept
+            bad_t += bad
             ledgers[i] = kept
+            # second field: pre-eviction ledger size (NOT a budget-compliance measure here)
             history[i].append((render(kept, cfg.provenance),
                                len(render(grown, cfg.provenance).split())))
-        log.info("itemised budget=%d session %d/%d done %s", budget, t, T, stats)
+        stats["bad_per_session"].append(bad_t)
+        log.info("itemised budget=%d session %d/%d done bad=%d empty=%d", budget, t, T, bad_t,
+                 stats["empty_ledgers"])
+    stats["kept_items_final"] = sum(len(led) for led in ledgers)
+    stats["kept_types_final"] = dict(Counter(it.type for led in ledgers for it in led))
     return history, stats
+
+
+def _hit_token_cap(model: HFModel, output: str) -> bool:
+    tok = getattr(model, "tok", None)
+    if tok is None:
+        return False
+    return len(tok.encode(output, add_special_tokens=False)) >= DELTA_MAX_TOKENS - 2
 
 
 def run_strategy(name: str, model: HFModel, bank: Bank, dialogues: list[Dialogue], budget: int,

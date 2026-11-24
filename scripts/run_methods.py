@@ -57,8 +57,9 @@ def main() -> None:
     tag = f"{args.name}_{args.model.split('/')[-1]}" + ("-nf4" if args.four_bit else "")
     out = Path(args.out)
     for strat in args.strategies:
-        probes_path = out / f"probes_{tag}_{strat}.jsonl"
-        mem_path = out / f"memories_{tag}_{strat}.jsonl"
+        final = {k: out / f"{k}_{tag}_{strat}.jsonl" for k in ("probes", "memories")}
+        # write to .partial files; earlier complete results survive a crash mid-run
+        probes_path, mem_path = (p.with_suffix(".jsonl.partial") for p in final.values())
         for p in (probes_path, mem_path):
             p.unlink(missing_ok=True)
         all_stats = {}
@@ -71,6 +72,8 @@ def main() -> None:
             logging.info("%s budget %d done %s", strat, b, stats)
         (out / f"stats_{tag}_{strat}.json").write_text(json.dumps(all_stats, indent=2),
                                                        encoding="utf-8")
+        probes_path.replace(final["probes"])
+        mem_path.replace(final["memories"])
 
 
 if __name__ == "__main__":

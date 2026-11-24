@@ -7,7 +7,7 @@ def _items():
         Item(text="vendor demo went well", type="decision", speaker="Ana", sessions=(1, 2, 3)),
         Item(text="lunch is Thai food", type="other", speaker="Bo", sessions=(1,)),
         Item(text="backup skips audit-log db", type="warning", speaker="Cy", sessions=(2,)),
-        Item(text="sprint 3 closed 12 tickets", type="status", speaker="Di", sessions=(3,)),
+        Item(text="sprint 3 closed 12 tickets", type="status", speaker="Di", sessions=(4,)),
     )
 
 
@@ -76,3 +76,33 @@ def test_enforce_budget_never_exceeds_budget():
     for policy in ("protected", "support", "recency"):
         kept = enforce_budget(_items(), budget=9, policy=policy, provenance=True)
         assert len(render(kept, provenance=True).split()) <= 9
+
+
+def test_numbers_are_not_mistaken_for_bullets():
+    new, _, _ = parse_delta("- 2.5 million budget overrun", 0, typed=False)
+    assert new[0].text == "2.5 million budget overrun"
+    new, _, _ = parse_delta("1. WARNING | Ana | 3.5% error rate", 0)
+    assert new[0].text == "3.5% error rate"
+
+
+def test_tolerant_same_variants():
+    _, same, bad = parse_delta("SAME | 3.\nSAME | #2\nSAME | 1 | restated text", n_existing=3)
+    assert same == (3, 2, 1) and bad == 0
+
+
+def test_bold_type_is_accepted():
+    new, _, bad = parse_delta("**WARNING** | Ana | audit log not backed up", 0)
+    assert bad == 0 and new[0].type == "warning"
+
+
+def test_ace_preamble_is_not_a_note_but_same_prefix_word_is():
+    new, _, bad = parse_delta("Here are the new notes:\n- Same vendor as before", 0, typed=False)
+    assert [i.text for i in new] == ["Same vendor as before"] and bad == 1
+
+
+def test_eviction_tiebreak_ignores_output_order():
+    items = tuple(Item(f"claim number {k} about topic", "warning", "A", (5,)) for k in range(6))
+    for policy in ("protected", "support", "recency"):
+        a = enforce_budget(items, 20, policy, provenance=False)
+        b = enforce_budget(items[::-1], 20, policy, provenance=False)
+        assert {i.text for i in a} == {i.text for i in b}

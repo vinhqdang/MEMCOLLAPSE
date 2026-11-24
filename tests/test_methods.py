@@ -20,7 +20,7 @@ class FakeModel:
     def generate(self, batch, max_new_tokens, batch_size=16):
         self.calls += 1
         self.prompts += [m[-1]["content"] for m in batch]
-        return [f"WARNING | Ana | risk number {self.calls} must be tracked\nSAME | 1\nbad"
+        return [f"- WARNING | Ana | risk number {self.calls} must be tracked\nSAME | 1\nbad"
                 for _ in batch]
 
 
@@ -51,8 +51,11 @@ def test_prompt_shows_previous_ledger(setup):
 def test_untyped_ace_keeps_newest(setup):
     bank, dialogues = setup
     mems, _ = run_strategy("ace", FakeModel(), bank, dialogues[:1], budget=12, batch_size=1)
-    # untyped mode stores whole lines, incl. the "WARNING | ..." text; newest survives
-    assert "risk number 10" in mems[0][-1][0]
+    # one item fits; it must be one refreshed in the last session (the newest note or the
+    # note restated by "SAME | 1"), never an older one
+    final = mems[0][-1][0]
+    assert final.count(chr(10)) == 0 and len(final.split()) <= 12
+    assert "risk number 10" in final or "risk number 2 " in final
 
 
 def test_unknown_strategy_raises(setup):
