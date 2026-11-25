@@ -19,8 +19,7 @@ from collections import Counter
 from dataclasses import dataclass
 
 from .generator import Bank, Dialogue, render_session
-from .ledger import (PROTECTED_TYPES, Item, apply_delta, enforce_budget, parse_delta, render,
-                     render_numbered)
+from .ledger import PROTECTED_TYPES, Item, apply_delta, enforce_budget, parse_delta, render
 from .llm import HFModel
 from .prompts import EMPTY_MEMORY, UPDATE_SYSTEM, clip_words
 
@@ -52,25 +51,23 @@ TYPED_TEMPLATE = (
     "The notes must be at most {budget} words. Output only the notes."
 )
 
+# Itemised extractors see only the new session (extract-then-consolidate, see ledger.py).
 LEDGER_TEMPLATE = (
     "Project: {project}\n\n"
-    "Current memory ledger (numbered):\n{memory}\n\n"
-    "Transcript of the new meeting (meeting {t}):\n{session}\n\n"
-    "List the claims from the new meeting worth remembering, one per line, in the form\n"
+    "Transcript of meeting {t}:\n{session}\n\n"
+    "List the claims from this meeting worth remembering, one per line, in the form\n"
     "TYPE | SPEAKER | claim in at most 15 words\n"
     "where TYPE is WARNING (a risk or problem), CONDITION (a requirement or precondition), "
     "DISSENT (an objection to the plan), DECISION, STATUS (progress figures) or OTHER.\n"
-    "If a claim restates a ledger item, write only: SAME | <item number>\n"
     "Keep names, numbers and places exact. Skip small talk. Output only these lines."
 )
 
 ACE_TEMPLATE = (
     "Project: {project}\n\n"
-    "Current notes (numbered):\n{memory}\n\n"
-    "Transcript of the new meeting (meeting {t}):\n{session}\n\n"
-    "Output only NEW notes to add for information not already in the notes, one per line, "
-    "starting with '- ' and at most 15 words each. If the meeting restates note n, write only: "
-    "SAME | n\nKeep names, numbers and places exact. Skip small talk."
+    "Transcript of meeting {t}:\n{session}\n\n"
+    "List the information from this meeting worth remembering as notes, one per line, "
+    "starting with '- ' and at most 15 words each.\n"
+    "Keep names, numbers and places exact. Skip small talk. Output only the notes."
 )
 
 
@@ -126,29 +123,28 @@ def itemised_memories(model: HFModel, bank: Bank, dialogues: list[Dialogue], bud
         raise ValueError("all dialogues must have the same number of sessions")
     ledgers: list[tuple[Item, ...]] = [() for _ in dialogues]
     history: list[list[tuple[str, int]]] = [[] for _ in dialogues]
-    stats: dict = {"lines_new": 0, "lines_dup": 0, "lines_same": 0, "lines_bad": 0,
+    stats: dict = {"claims": 0, "lines_new": 0, "lines_merged": 0, "lines_bad": 0,
                    "truncated_outputs": 0, "evicted": 0, "evicted_protected": 0,
                    "empty_ledgers": 0, "kept_items_final": 0, "kept_types_final": {},
                    "bad_per_session": []}
     for t in range(1, T + 1):
-        msgs = [_messages(cfg.template.format(
-            project=bank.project, t=t, session=render_session(d, t),
-            memory=render_numbered(ledgers[i], cfg.provenance) or EMPTY_MEMORY))
-            for i, d in enumerate(dialogues)]
+        msgs = [_messages(cfg.template.format(project=bank.project, t=t,
+                                              session=render_session(d, t)))
+                for d in dialogues]
         outs = model.generate(msgs, max_new_tokens=DELTA_MAX_TOKENS, batch_size=batch_size)
         bad_t = 0
         for i, o in enumerate(outs):
             if _hit_token_cap(model, o):  # last line may be cut mid-claim: drop it
                 o = "\n".join(o.splitlines()[:-1])
                 stats["truncated_outputs"] += 1
-            new, same, bad = parse_delta(o, n_existing=len(ledgers[i]), typed=cfg.typed)
-            grown = apply_delta(ledgers[i], new, same, session=t)
+            new, bad = parse_delta(o, typed=cfg.typed)
+            grown, merged = apply_delta(ledgers[i], new, session=t)
             kept = enforce_budget(grown, budget, cfg.policy, cfg.provenance)
             kept_ids = {id(it) for it in kept}
             gone = [it for it in grown if id(it) not in kept_ids]
+            stats["claims"] += len(new)
             stats["lines_new"] += len(grown) - len(ledgers[i])
-            stats["lines_dup"] += len(new) - (len(grown) - len(ledgers[i]))
-            stats["lines_same"] += len(same)
+            stats["lines_merged"] += merged
             stats["lines_bad"] += bad
             stats["evicted"] += len(gone)
             stats["evicted_protected"] += sum(it.type in PROTECTED_TYPES for it in gone)

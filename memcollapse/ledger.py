@@ -1,8 +1,12 @@
 """Itemised memory with provenance and budget-constrained eviction (pure functions).
 
-The LLM only proposes deltas (new items / restatements of existing items); item text is never
-rewritten afterwards, so details cannot erode through repeated paraphrase. Eviction under the
-word budget is a deterministic policy:
+Extract-then-consolidate: the LLM only lists the claims of the newest session (it never sees
+the memory, so it cannot copy old items back); code consolidates them. A new claim that
+paraphrases an existing item (content-word overlap >= MERGE_THRESHOLD and no conflicting
+numbers) adds the session to that item's provenance; otherwise it is appended verbatim. Item text
+is never rewritten afterwards, so details cannot erode through repeated paraphrase. (An earlier
+design asked the model to write "SAME | n" for restatements; small models could not follow it.)
+Eviction under the word budget is a deterministic policy:
 
 - "protected": items typed WARNING/CONDITION/DISSENT/DECISION are evicted only after every
   other item is gone; within a tier the least recently mentioned goes first. Support count is
@@ -21,10 +25,16 @@ TYPES = ("warning", "condition", "dissent", "decision", "status", "other")
 PROTECTED_TYPES = frozenset({"warning", "condition", "dissent", "decision"})
 POLICIES = ("protected", "support", "recency")
 
+MERGE_THRESHOLD = 0.4  # calibrated on bank paraphrases: 80-91% same-claim merges, ~0 false
+
 _BULLET = re.compile(r"^\s*(?:[-*•]\s*|\d+[.)]\s+)")  # "2.5 million" is not a bullet
-_HAS_BULLET = re.compile(r"^\s*[-*•]")
-_SAME = re.compile(r"^SAME\s*\|\s*#?(\d+)\b", re.IGNORECASE)  # tolerates "SAME | 3." / "| 3 | ..."
-_SAME_LIKE = re.compile(r"^SAME\s*\|", re.IGNORECASE)
+_SAME_LIKE = re.compile(r"^SAME\s*\|", re.IGNORECASE)  # legacy restatement syntax: never a claim
+_PREAMBLE = re.compile(r"(:\s*$)|^(here (is|are)|new notes|notes\b|none\b|no new)", re.IGNORECASE)
+_NUM = re.compile(r"\d+(?:[.,]\d+)?")
+_STOP = frozenset(
+    "the a an and or of to in on for is are was were be been it its this that we our i you they "
+    "at by with from as not no but so if all still has have had just about will would can do does "
+    "did than then there their what which who me my us also into".split())
 
 
 @dataclass(frozen=True)
@@ -43,64 +53,79 @@ def _norm(text: str) -> str:
     return re.sub(r"[^a-z0-9 ]", "", text.lower()).strip()
 
 
-def parse_delta(output: str, n_existing: int, typed: bool = True
-                ) -> tuple[tuple[Item, ...], tuple[int, ...], int]:
-    """Parse model output into (new items, 1-based restated indices, #unparsable lines)."""
+def _parse_line(raw: str, typed: bool) -> Item | None:
+    line = _BULLET.sub("", raw.replace("**", "")).strip()
+    if not line or _SAME_LIKE.match(line) or _PREAMBLE.search(line):
+        return None
+    if not typed:
+        return Item(text=line, type="other", speaker="", sessions=())
+    parts = [p.strip() for p in line.split("|")]
+    if len(parts) >= 3 and parts[0].lower() in TYPES:
+        text = " | ".join(parts[2:]).strip()
+        return Item(text, parts[0].lower(), parts[1], ()) if text else None
+    if len(parts) == 2 and parts[0].lower() in TYPES and parts[1]:  # speaker omitted
+        return Item(parts[1], parts[0].lower(), "", ())
+    return None
+
+
+def parse_delta(output: str, typed: bool = True) -> tuple[tuple[Item, ...], int]:
+    """Parse model output into (claims, #non-empty lines that are not claims)."""
     new: list[Item] = []
-    same: list[int] = []
     bad = 0
     for raw in output.splitlines():
-        line = _BULLET.sub("", raw.replace("**", "")).strip()
-        if not line:
+        if not raw.strip():
             continue
-        m = _SAME.match(line)
-        if m:
-            k = int(m.group(1))
-            if 1 <= k <= n_existing:
-                same.append(k)
-            else:
-                bad += 1
-            continue
-        if _SAME_LIKE.match(line):  # malformed restatement, never a note
+        item = _parse_line(raw, typed)
+        if item is None:
             bad += 1
-            continue
-        if not typed:
-            if not _HAS_BULLET.match(raw.replace("**", "")):  # preambles like "Here are the new notes:"
-                bad += 1
-                continue
-            new.append(Item(text=line, type="other", speaker="", sessions=()))
-            continue
-        parts = [p.strip() for p in line.split("|")]
-        if len(parts) != 3 or parts[0].lower() not in TYPES or not parts[2]:
-            bad += 1
-            continue
-        new.append(Item(text=parts[2], type=parts[0].lower(), speaker=parts[1], sessions=()))
-    return tuple(new), tuple(dict.fromkeys(same)), bad
+        else:
+            new.append(item)
+    return tuple(new), bad
 
 
-def _touch(item: Item, session: int) -> Item:
-    if session in item.sessions:
-        return item
-    return replace(item, sessions=(*item.sessions, session))
+def _content(text: str) -> frozenset[str]:
+    words = re.findall(r"[a-z0-9]+", text.lower())
+    return frozenset(w for w in words if w.isdigit() or (len(w) > 2 and w not in _STOP))
 
 
-def apply_delta(ledger: tuple[Item, ...], new: tuple[Item, ...], same: tuple[int, ...],
-                session: int) -> tuple[Item, ...]:
-    """Return a new ledger: restated items gain provenance, new items are appended.
+def similarity(a: str, b: str) -> float:
+    """Overlap coefficient of content words; 0 if both mention numbers and the numbers differ
+    (so 'sprint 1: 24 tickets' never absorbs 'sprint 2: 18 tickets')."""
+    na, nb = set(_NUM.findall(a)), set(_NUM.findall(b))
+    if na and nb and na != nb:
+        return 0.0
+    ca, cb = _content(a), _content(b)
+    return len(ca & cb) / max(1, min(len(ca), len(cb)))
 
-    Only explicit SAME restatements add provenance. A new line whose text duplicates an existing
-    item is dropped without touching provenance: models often copy the ledger back verbatim,
-    which would otherwise inflate support counts with sessions that never mentioned the claim.
+
+def _match(ledger: list[Item], text: str) -> int | None:
+    best, best_k = MERGE_THRESHOLD, None
+    for k, it in enumerate(ledger):
+        s = similarity(it.text, text)
+        if s >= best:
+            best, best_k = s, k
+    return best_k
+
+
+def apply_delta(ledger: tuple[Item, ...], new: tuple[Item, ...], session: int
+                ) -> tuple[tuple[Item, ...], int]:
+    """Return (new ledger, #claims merged into an existing item).
+
+    A claim matching an existing item adds `session` to its provenance (text and type of the
+    first statement are kept); otherwise it is appended with provenance (session,). Matching runs
+    against the growing ledger, so duplicates within one output collapse into one item.
     """
-    out = [(_touch(it, session) if (k + 1) in same else it) for k, it in enumerate(ledger)]
-    seen = {_norm(it.text) for it in out}
+    out = list(ledger)
+    merged = 0
     for it in new:
-        key = _norm(it.text)
-        if key in seen:
+        k = _match(out, it.text)
+        if k is None:
+            out.append(replace(it, sessions=(session,)))
             continue
-        seen.add(key)
-        out.append(replace(it, sessions=(session,)))
-    return tuple(out)
+        merged += 1
+        if session not in out[k].sessions:
+            out[k] = replace(out[k], sessions=(*out[k].sessions, session))
+    return tuple(out), merged
 
 
 def render_item(item: Item, provenance: bool) -> str:
@@ -113,10 +138,6 @@ def render_item(item: Item, provenance: bool) -> str:
 
 def render(ledger: tuple[Item, ...], provenance: bool) -> str:
     return "\n".join(render_item(it, provenance) for it in ledger)
-
-
-def render_numbered(ledger: tuple[Item, ...], provenance: bool) -> str:
-    return "\n".join(f"{k}. {render_item(it, provenance)[2:]}" for k, it in enumerate(ledger, 1))
 
 
 def _tiebreak(item: Item) -> int:

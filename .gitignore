@@ -229,3 +229,5 @@ results/colab_dl/
 results/clustered*/probes_*.jsonl
 results/bench/probes_*.jsonl
 results/natural/probes_*.jsonl
+results/methods/probes_*.jsonl
+results/methods/*.partial

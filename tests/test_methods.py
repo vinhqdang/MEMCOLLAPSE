@@ -9,7 +9,7 @@ BANK = Path(__file__).resolve().parents[1] / "data" / "claims_heron.json"
 
 
 class FakeModel:
-    """Emits one WARNING per session plus a restatement of item 1; records prompts."""
+    """Each session: one new WARNING (distinct number) and a restatement of the first one."""
 
     name = "fake"
 
@@ -20,8 +20,8 @@ class FakeModel:
     def generate(self, batch, max_new_tokens, batch_size=16):
         self.calls += 1
         self.prompts += [m[-1]["content"] for m in batch]
-        return [f"- WARNING | Ana | risk number {self.calls} must be tracked\nSAME | 1\nbad"
-                for _ in batch]
+        return [f"- WARNING | Ana | risk number {self.calls} must be tracked\n"
+                f"- WARNING | Ana | tracking of risk number 1 is a must\nbad" for _ in batch]
 
 
 @pytest.fixture(scope="module")
@@ -36,26 +36,34 @@ def test_ledger_memories_respect_budget_and_keep_provenance(setup):
     assert len(mems) == 2 and all(len(h) == 10 for h in mems)
     assert all(len(m.split()) <= 40 for h in mems for m, _ in h)
     assert "[WARNING; Ana; s" in mems[0][-1][0]
-    # 10 "bad" lines + one "SAME | 1" against the empty ledger, per dialogue
-    assert stats["lines_bad"] == 22
-    assert stats["lines_new"] == 20 and stats["evicted"] > 0
+    # per dialogue and session: 1 bad line; session 1 the restatement collapses into the new
+    # item, later it merges into item 1 -> 10 new items, 10 merges per dialogue
+    assert stats["lines_bad"] == 20
+    assert stats["lines_new"] == 20 and stats["lines_merged"] == 20
+    assert stats["evicted"] > 0
 
 
-def test_prompt_shows_previous_ledger(setup):
+def test_restated_item_accumulates_provenance(setup):
+    bank, dialogues = setup
+    mems, _ = run_strategy("ledger", FakeModel(), bank, dialogues[:1], budget=500, batch_size=1)
+    assert "[WARNING; Ana; s1,2,3,4,5,6,7,8,9,10] risk number 1 must" in mems[0][-1][0]
+
+
+def test_extractor_never_sees_memory(setup):
     bank, dialogues = setup
     fake = FakeModel()
     run_strategy("ledger", fake, bank, dialogues[:1], budget=200, batch_size=1)
-    assert "1. [WARNING; Ana; s1] risk number 1 must be tracked" in fake.prompts[1]
+    assert all("risk number" not in p for p in fake.prompts)
 
 
-def test_untyped_ace_keeps_newest(setup):
+def test_untyped_ace_keeps_most_recent(setup):
     bank, dialogues = setup
     mems, _ = run_strategy("ace", FakeModel(), bank, dialogues[:1], budget=12, batch_size=1)
-    # one item fits; it must be one refreshed in the last session (the newest note or the
-    # note restated by "SAME | 1"), never an older one
+    # one note fits; it must be one mentioned in the last session (the newest, or the restated
+    # note 1), never an older one
     final = mems[0][-1][0]
     assert final.count(chr(10)) == 0 and len(final.split()) <= 12
-    assert "risk number 10" in final or "risk number 2 " in final
+    assert "risk number 10" in final or "risk number 1 " in final
 
 
 def test_unknown_strategy_raises(setup):

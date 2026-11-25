@@ -1,5 +1,10 @@
-from memcollapse.ledger import (Item, apply_delta, enforce_budget, parse_delta, render,
-                                PROTECTED_TYPES)
+import json
+from pathlib import Path
+
+from memcollapse.ledger import (MERGE_THRESHOLD, PROTECTED_TYPES, Item, apply_delta,
+                                enforce_budget, parse_delta, render, similarity)
+
+DATA = Path(__file__).resolve().parents[1] / "data"
 
 
 def _items():
@@ -11,42 +16,72 @@ def _items():
     )
 
 
-def test_parse_delta_reads_new_items_and_restatements():
-    out = "WARNING | Cy | backup skips audit-log db\nSAME | 2\ngarbage line\nOTHER|Bo|lunch is Thai"
-    new, same, bad = parse_delta(out, n_existing=3)
+def test_parse_typed_lines_and_count_bad():
+    out = "WARNING | Cy | backup skips audit-log db\ngarbage line\nOTHER|Bo|lunch is Thai"
+    new, bad = parse_delta(out)
     assert [(i.type, i.speaker, i.text) for i in new] == [
         ("warning", "Cy", "backup skips audit-log db"), ("other", "Bo", "lunch is Thai")]
-    assert same == (2,)
     assert bad == 1
 
 
-def test_parse_delta_ignores_out_of_range_restatement_and_unknown_type():
-    new, same, bad = parse_delta("SAME | 9\nSAME | 0\nRUMOUR | X | y", n_existing=3)
-    assert new == () and same == () and bad == 3
+def test_parse_tolerates_missing_speaker_extra_pipes_and_bold():
+    new, bad = parse_delta("**WARNING** | Ana | rate | 3.5% error\nDISSENT | SLA too low")
+    assert bad == 0
+    assert (new[0].type, new[0].text) == ("warning", "rate | 3.5% error")
+    assert (new[1].type, new[1].speaker, new[1].text) == ("dissent", "", "SLA too low")
 
 
-def test_parse_delta_untyped_mode_accepts_plain_bullets():
-    new, same, bad = parse_delta("- keep the EU endpoint\n- SAME | 1", n_existing=1, typed=False)
-    assert [i.text for i in new] == ["keep the EU endpoint"] and same == (1,) and bad == 0
+def test_parse_rejects_unknown_type_same_lines_and_preambles():
+    new, bad = parse_delta("RUMOUR | X | y\nSAME | 2\nHere are the claims:\nSAME | Jo | z")
+    assert new == () and bad == 4
 
 
-def test_apply_delta_adds_provenance_without_mutating():
+def test_untyped_accepts_plain_and_bulleted_notes_but_not_preambles():
+    out = "Here are the notes:\n- keep the EU endpoint\nSprint 2: 18 tickets closed\nNotes:"
+    new, bad = parse_delta(out, typed=False)
+    assert [i.text for i in new] == ["keep the EU endpoint", "Sprint 2: 18 tickets closed"]
+    assert bad == 2
+
+
+def test_numbers_are_not_mistaken_for_bullets():
+    new, _ = parse_delta("- 2.5 million budget overrun", typed=False)
+    assert new[0].text == "2.5 million budget overrun"
+    new, _ = parse_delta("1. WARNING | Ana | 3.5% error rate")
+    assert new[0].text == "3.5% error rate"
+
+
+def test_paraphrase_merges_into_existing_item_and_adds_provenance():
     led = _items()
-    new_led = apply_delta(led, (Item("new risk", "warning", "Ed", ()),), same=(3,), session=4)
+    para = Item("The audit-log db is still skipped by the backup", "warning", "Ed", ())
+    new_led, merged = apply_delta(led, (para,), session=5)
+    assert merged == 1 and len(new_led) == len(led)
+    assert new_led[2].sessions == (2, 5) and new_led[2].text == led[2].text
     assert led[2].sessions == (2,)  # original untouched
-    assert new_led[2].sessions == (2, 4)
-    assert new_led[-1].sessions == (4,) and len(new_led) == 5
 
 
-def test_apply_delta_drops_copied_items_without_adding_provenance():
+def test_different_numbers_never_merge():
     led = _items()
-    new_led = apply_delta(led, (Item("Lunch is Thai food.", "other", "Bo", ()),), same=(), session=5)
-    assert len(new_led) == len(led) and new_led[1].sessions == (1,)
+    upd = Item("sprint 4 closed 15 tickets", "status", "Di", ())
+    new_led, merged = apply_delta(led, (upd,), session=5)
+    assert merged == 0 and len(new_led) == 5 and new_led[-1].sessions == (5,)
 
 
-def test_untyped_malformed_same_is_not_a_note():
-    new, same, bad = parse_delta("Same | Priya\nSAME | Mei", n_existing=2, typed=False)
-    assert new == () and same == () and bad == 2
+def test_duplicates_within_one_output_collapse():
+    a = Item("cutover needs the EU endpoint for SMS", "condition", "Jo", ())
+    b = Item("SMS provider must use EU endpoint before cutover", "condition", "Jo", ())
+    new_led, merged = apply_delta((), (a, b), session=1)
+    assert len(new_led) == 1 and merged == 1 and new_led[0].sessions == (1,)
+
+
+def test_threshold_separates_bank_paraphrases_from_other_claims():
+    b = json.loads((DATA / "claims_heron.json").read_text(encoding="utf-8"))
+    claims = b["claims"]
+    same = [similarity(c["mentions"][0], m) >= MERGE_THRESHOLD
+            for c in claims for m in c["mentions"][1:]]
+    diff = [similarity(c["mentions"][0], d["mentions"][0]) >= MERGE_THRESHOLD
+            for c in claims for d in claims if c["id"] < d["id"]]
+    assert sum(same) / len(same) > 0.7
+    assert sum(diff) <= 1
 
 
 def test_render_includes_type_and_provenance():
@@ -64,7 +99,7 @@ def test_protected_policy_evicts_unprotected_first_even_if_frequent():
 
 def test_support_policy_evicts_rare_items_first():
     kept = enforce_budget(_items(), budget=6, policy="support", provenance=False)
-    assert [i.text for i in kept] == ["vendor demo went well"]  # most-supported survives
+    assert [i.text for i in kept] == ["vendor demo went well"]
 
 
 def test_recency_policy_keeps_newest():
@@ -76,28 +111,6 @@ def test_enforce_budget_never_exceeds_budget():
     for policy in ("protected", "support", "recency"):
         kept = enforce_budget(_items(), budget=9, policy=policy, provenance=True)
         assert len(render(kept, provenance=True).split()) <= 9
-
-
-def test_numbers_are_not_mistaken_for_bullets():
-    new, _, _ = parse_delta("- 2.5 million budget overrun", 0, typed=False)
-    assert new[0].text == "2.5 million budget overrun"
-    new, _, _ = parse_delta("1. WARNING | Ana | 3.5% error rate", 0)
-    assert new[0].text == "3.5% error rate"
-
-
-def test_tolerant_same_variants():
-    _, same, bad = parse_delta("SAME | 3.\nSAME | #2\nSAME | 1 | restated text", n_existing=3)
-    assert same == (3, 2, 1) and bad == 0
-
-
-def test_bold_type_is_accepted():
-    new, _, bad = parse_delta("**WARNING** | Ana | audit log not backed up", 0)
-    assert bad == 0 and new[0].type == "warning"
-
-
-def test_ace_preamble_is_not_a_note_but_same_prefix_word_is():
-    new, _, bad = parse_delta("Here are the new notes:\n- Same vendor as before", 0, typed=False)
-    assert [i.text for i in new] == ["Same vendor as before"] and bad == 1
 
 
 def test_eviction_tiebreak_ignores_output_order():
