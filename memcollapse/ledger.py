@@ -11,6 +11,8 @@ Eviction under the word budget is a deterministic policy:
 - "protected": items typed WARNING/CONDITION/DISSENT/DECISION are evicted only after every
   other item is gone; within a tier the least recently mentioned goes first. Support count is
   deliberately NOT used, so a claim mentioned once is not disadvantaged (our method).
+- "tiered":    like protected, but DECISION items form a middle tier evicted before
+  WARNING/CONDITION/DISSENT: decisions mostly restate the frequently repeated majority thread.
 - "support":   lowest support (number of sessions mentioning it) first, then oldest
   (frequency-driven ablation: reproduces the bias of summarisers).
 - "recency":   least recently mentioned first (ACE-style itemised context with FIFO pruning).
@@ -23,7 +25,9 @@ from dataclasses import dataclass, replace
 
 TYPES = ("warning", "condition", "dissent", "decision", "status", "other")
 PROTECTED_TYPES = frozenset({"warning", "condition", "dissent", "decision"})
-POLICIES = ("protected", "support", "recency")
+POLICIES = ("protected", "tiered", "support", "recency")
+# tiered: risk-bearing minority claims > decisions (usually the repeated majority thread) > rest
+TIER = {"warning": 2, "condition": 2, "dissent": 2, "decision": 1}
 
 MERGE_THRESHOLD = 0.4  # calibrated on bank paraphrases: 80-91% same-claim merges, ~0 false
 
@@ -148,6 +152,8 @@ def _tiebreak(item: Item) -> int:
 def _eviction_key(policy: str, k: int, item: Item) -> tuple:
     if policy == "protected":
         return (item.type in PROTECTED_TYPES, item.last, _tiebreak(item), k)
+    if policy == "tiered":
+        return (TIER.get(item.type, 0), item.last, _tiebreak(item), k)
     if policy == "support":
         return (len(item.sessions), item.last, _tiebreak(item), k)
     if policy == "recency":

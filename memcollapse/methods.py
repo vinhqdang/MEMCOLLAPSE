@@ -10,7 +10,8 @@ Itemised family (the model only proposes deltas; code keeps items verbatim, see 
   ace          untyped bullets, delta updates, recency pruning (ACE-style, Zhang et al. 2026)
   ledger-supp  typed + provenance, support-count eviction (ablation: frequency-driven policy)
   ledger-noprov typed, protected eviction, no provenance tags in the rendered memory (ablation)
-  ledger       typed + provenance, protected eviction (ours)
+  ledger       typed + provenance, protected eviction
+  ledger-tier  typed, tiered eviction (decisions below warnings/conditions/dissent), no tags
 """
 from __future__ import annotations
 
@@ -85,6 +86,7 @@ ITEMISED = {
     "ledger-supp": ItemisedConfig(True, "support", True, LEDGER_TEMPLATE),
     "ledger-noprov": ItemisedConfig(True, "protected", False, LEDGER_TEMPLATE),
     "ledger": ItemisedConfig(True, "protected", True, LEDGER_TEMPLATE),
+    "ledger-tier": ItemisedConfig(True, "tiered", False, LEDGER_TEMPLATE),
 }
 STRATEGIES = tuple(SUMMARY_TEMPLATES) + tuple(ITEMISED)
 
@@ -128,10 +130,9 @@ def itemised_memories(model: HFModel, bank: Bank, dialogues: list[Dialogue], bud
                    "empty_ledgers": 0, "kept_items_final": 0, "kept_types_final": {},
                    "bad_per_session": []}
     for t in range(1, T + 1):
-        msgs = [_messages(cfg.template.format(project=bank.project, t=t,
-                                              session=render_session(d, t)))
-                for d in dialogues]
-        outs = model.generate(msgs, max_new_tokens=DELTA_MAX_TOKENS, batch_size=batch_size)
+        prompts = [cfg.template.format(project=bank.project, t=t, session=render_session(d, t))
+                   for d in dialogues]
+        outs = _extract(model, prompts, batch_size)
         bad_t = 0
         for i, o in enumerate(outs):
             if _hit_token_cap(model, o):  # last line may be cut mid-claim: drop it
@@ -160,6 +161,22 @@ def itemised_memories(model: HFModel, bank: Bank, dialogues: list[Dialogue], bud
     stats["kept_items_final"] = sum(len(led) for led in ledgers)
     stats["kept_types_final"] = dict(Counter(it.type for led in ledgers for it in led))
     return history, stats
+
+
+def _extract(model: HFModel, prompts: list[str], batch_size: int) -> list[str]:
+    """Greedy extraction, cached per model instance by prompt.
+
+    The extractor never sees the memory, so its output for a session does not depend on budget
+    or eviction policy: all itemised variants sharing a template reuse one generation, and the
+    ablations are guaranteed to consolidate exactly the same extracted claims.
+    """
+    cache: dict[str, str] = model.__dict__.setdefault("_extract_cache", {})
+    todo = list(dict.fromkeys(p for p in prompts if p not in cache))
+    if todo:
+        outs = model.generate([_messages(p) for p in todo], max_new_tokens=DELTA_MAX_TOKENS,
+                              batch_size=batch_size)
+        cache.update(zip(todo, outs))
+    return [cache[p] for p in prompts]
 
 
 def _hit_token_cap(model: HFModel, output: str) -> bool:

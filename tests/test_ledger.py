@@ -108,14 +108,24 @@ def test_recency_policy_keeps_newest():
 
 
 def test_enforce_budget_never_exceeds_budget():
-    for policy in ("protected", "support", "recency"):
+    for policy in ("protected", "tiered", "support", "recency"):
         kept = enforce_budget(_items(), budget=9, policy=policy, provenance=True)
         assert len(render(kept, provenance=True).split()) <= 9
 
 
 def test_eviction_tiebreak_ignores_output_order():
     items = tuple(Item(f"claim number {k} about topic", "warning", "A", (5,)) for k in range(6))
-    for policy in ("protected", "support", "recency"):
+    for policy in ("protected", "tiered", "support", "recency"):
         a = enforce_budget(items, 20, policy, provenance=False)
         b = enforce_budget(items[::-1], 20, policy, provenance=False)
         assert {i.text for i in a} == {i.text for i in b}
+
+
+def test_tiered_policy_evicts_decisions_before_warnings():
+    items = (Item("backup skips audit-log db", "warning", "Cy", (1,)),
+             Item("go live on 1 May", "decision", "Al", (5,)),
+             Item("lunch is Thai food", "other", "Bo", (6,)))
+    kept = enforce_budget(items, budget=6, policy="tiered", provenance=False)
+    assert [i.type for i in kept] == ["warning"]
+    kept = enforce_budget(items, budget=12, policy="tiered", provenance=False)
+    assert [i.type for i in kept] == ["warning", "decision"]

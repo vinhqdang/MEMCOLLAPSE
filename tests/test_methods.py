@@ -75,3 +75,14 @@ def test_unknown_strategy_raises(setup):
 def test_all_itemised_configs_have_valid_policy():
     from memcollapse.ledger import POLICIES
     assert all(cfg.policy in POLICIES for cfg in ITEMISED.values())
+
+
+def test_itemised_variants_share_one_extraction(setup):
+    bank, dialogues = setup
+    fake = FakeModel()
+    a, _ = run_strategy("ledger-noprov", fake, bank, dialogues, budget=40, batch_size=2)
+    calls = fake.calls
+    b, _ = run_strategy("ledger-tier", fake, bank, dialogues, budget=80, batch_size=2)
+    assert fake.calls == calls == 10  # second variant and budget reuse the cached extraction
+    c, _ = run_strategy("ace", fake, bank, dialogues, budget=40, batch_size=2)
+    assert fake.calls == 20  # different template -> new extraction
