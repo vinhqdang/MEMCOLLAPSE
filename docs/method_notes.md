@@ -36,3 +36,26 @@
   typed DISSENT), which is part of what the protected policy has to survive; report type stats.
 - Merge errors cost the ledger in two ways: missed merges duplicate items (budget), false merges
   hide a distinct claim. Both are measurable offline from memories_*.jsonl.
+
+## Results: Qwen2.5-1.5B, 4 domains (2026-11-26)
+
+Full tables: `results/methods/analysis/qwen15_{heron,city,science,product,pooled}.txt`.
+Gain over generic rolling on the same (claim, t, dialogue), claim FE, dialogue-clustered SE, pooled
+over 4 domains (* = p<0.05):
+
+| strategy | B=80 crit. all | B=80 crit. f=1 | B=160 crit. all | B=160 crit. f=1 | freq. slope B=160 |
+|---|---|---|---|---|---|
+| typed | +0.145* | +0.022 | +0.150* | +0.024 | +0.282 |
+| ledger-noprov | -0.043* | +0.008 | +0.079* | +0.255* | +0.059 |
+| ledger-tier | +0.021 | +0.060* | +0.166* | +0.315* (p=1e-38) | +0.088 |
+
+Rolling slope at B=160: +0.189; full context: +0.011.
+
+- ledger-tier is the best strategy at B=160 in every domain (f=1 gain +0.23 to +0.36) and beats
+  ledger-noprov on f=1, f=4 and critical-all: demoting decisions below warnings/conditions/dissent
+  was the right call.
+- Typed compaction raises critical accuracy but only for repeated claims; it is the most
+  frequency-biased strategy (slope 0.28). Prompt-level importance cues do not fix the frequency
+  bias; explicit item retention does.
+- B=80 is too tight for any strategy to rescue singletons by much (+0.06 at best).
+- Cost: incidental claims lose about 0.06-0.09 under itemised strategies.

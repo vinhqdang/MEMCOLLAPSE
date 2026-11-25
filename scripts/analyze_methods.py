@@ -28,7 +28,7 @@ def ols(formula: str, d: pd.DataFrame):
 
 
 def strategy_order(d: pd.DataFrame) -> list[str]:
-    first = ["full", "rolling", "rolling-imp", "typed", "ace", "ledger-supp", "ledger-noprov",
+    first = ["full", "rolling", "rolling-imp", "typed", "ace", "ledger-supp", "ledger-noprov", "ledger-tier",
              "ledger"]
     present = list(d.strategy.unique())
     return [s for s in first if s in present] + sorted(set(present) - set(first))
