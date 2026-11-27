@@ -22,5 +22,11 @@ At $B{=}80$ rolling erases nearly everything for small models, so the frequency 
 \paragraph{A second failure: wholesale overwrite.}
 On product at $B{=}160$, Gemma writes notes for the newest meeting only, keeping ${\sim}6\%$ of claims at every frequency. We report this frequency-independent failure separately.
 
+\paragraph{The writer, not the reader.}
+If small models were merely poor at reading notes, the frequency gradient could come from the reader.
+We re-probe every writer's Heron memories with one fixed reader (Qwen2.5-7B, NF4) and compare with the same reader's full-context probes.
+The gradient is a property of the memory: Qwen-1.5B memories read by the 7B reader give $\delta_{\text{crit}}=+0.255$ at $B{=}160$ ($p<10^{-13}$; self-read: $+0.272$), with single-mention critical claims keeping 5\% of full-context accuracy against 64\% at $f{=}4$; incidental $+0.198$.
+Phi-3.5 memories show a weaker gradient (incidental $+0.101$, $p=.005$; critical $+0.044$ to $+0.061$, $p\ge.06$), and Gemma memories none ($|\delta|\le0.016$), matching their self-read profiles.
+
 \paragraph{Robustness (pending).}
-\todo{fixed external reader (Qwen-7B reads all memories); naturalistic dialogues; decision-impact metric.}
+\todo{naturalistic dialogues; decision-impact metric.}
