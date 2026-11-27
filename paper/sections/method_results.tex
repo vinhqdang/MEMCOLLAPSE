@@ -1,0 +1,41 @@
+\section{Keeping What Was Said Once}
+\label{sec:method-results}
+
+% Numbers from results/methods/analysis/*.txt; final tables TODO.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+ & \multicolumn{2}{c}{Qwen-1.5B (4 dom.)} & \multicolumn{2}{c}{Qwen-7B (3 dom.)} \\
+Strategy & $B{=}80$ & $B{=}160$ & $B{=}80$ & $B{=}160$ \\
+\midrule
+rolling          & .17 & .17 & .12 & .17 \\
+rolling-imp      & .18 & .21 & .40 & .70 \\
+typed            & .20 & .19 & .31 & .46 \\
+ledger-protected & .18 & .42 & .44 & .71 \\
+\ledger{}        & \textbf{.23} & \textbf{.48} & \textbf{.62} & \textbf{.71} \\
+\midrule
+full context     & .96 & .96 & .94 & .94 \\
+\bottomrule
+\end{tabular}
+\caption{Accuracy on single-mention critical claims after their last mention. \todo{add CIs.}}
+\label{tab:f1}
+\end{table}
+
+\paragraph{\ledger{} rescues single-mention claims.}
+Against rolling on the same cells, \ledger{} raises single-mention critical accuracy by $+0.315$ (Qwen-1.5B, $B{=}160$, $p<10^{-30}$) and $+0.50$ to $+0.54$ (Qwen-7B, both budgets), and is significant in every domain at $B{=}160$.
+
+\paragraph{When the prompt fix is enough.}
+Directly against rolling-imp, \ledger{} gains on single-mention critical claims at Qwen-1.5B ($+0.05$ at $B{=}80$, $+0.28$ at $B{=}160$) and at Qwen-7B with $B{=}80$ ($+0.22$); at Qwen-7B with $B{=}160$ the two are tied ($+0.02$, n.s.).
+A capable summariser with room to spare follows the instruction to keep warnings; a weak summariser, or a tight budget, does not.
+\ledger{} never loses on the target cell.
+
+\paragraph{Typing the summary is not enough.}
+Typed compaction raises critical accuracy overall but mainly for repeated claims: it is the most frequency-biased strategy at both model sizes (slope $+0.28$ and $+0.18$ per doubling at $B{=}160$, vs.\ $+0.09$ and $+0.05$ for \ledger{}).
+
+\paragraph{Ablations.}
+Eviction by support reproduces the frequency gradient (slope $+0.20$ to $+0.33$).
+The middle tier for decisions matters when the top tier must be evicted (Qwen-7B $B{=}80$: $+0.18$ on single-mention claims over the flat tier) and is neutral otherwise.
+Rendering provenance costs budget and lowers accuracy.
+\todo{cost on incidental claims: $-0.06$ to $-0.09$ for 1.5B; neutral-to-positive for 7B.}

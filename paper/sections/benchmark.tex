@@ -1,0 +1,35 @@
+\section{The \sys{} Benchmark}
+\label{sec:benchmark}
+
+\paragraph{Claim banks.}
+Each of four domains is a fictional project followed across sixteen meetings: a clinic booking-system migration, a city flood-barrier programme, a multi-site field-study consortium and a consumer-hardware launch.
+A domain's bank holds 24 claims.
+Twelve are \emph{critical}: warnings about a risk (e.g.\ a backup that skips a database), conditions that must hold before an action, and dissent from the agreed plan.
+Twelve are \emph{incidental}: true but decision-irrelevant details (a room change, a lunch order).
+Each claim has four paraphrased mentions, a multiple-choice question whose answer is stated only by that claim, the correct option and two plausible distractors (Appendix~\ref{app:bank}).
+A bank also supplies a \emph{majority thread} of routine statements about the plan, filler small talk, a per-session progress line, and eight speakers.
+
+\paragraph{Dialogue construction.}
+A dialogue has sixteen sessions and carries six critical and six incidental claims.
+Each claim is assigned a frequency $f\in\{1,2,4\}$ by a Latin rotation over dialogue index, so that across every three consecutive dialogues each claim appears at each frequency, and claim content is perfectly balanced across frequency levels.
+The session of the claim's last mention, $L$, is drawn uniformly from $\{4,\dots,8\}$ independently of $f$; mentions are spread evenly over $[1,L]$ (\emph{spread} schedule) or placed in the $f$ consecutive sessions ending at $L$ (\emph{clustered} schedule, \S\ref{sec:findings}).
+The $k$-th mention uses the $k$-th paraphrase, so single-mention claims are always phrased by the first paraphrase; all claims are therefore equally easy to recognise in isolation.
+Every session also contains two majority-thread utterances, three filler utterances and a progress line, rendered as a transcript with speaker names.
+We generate 48 dialogues per domain.
+A second, naturalistic variant rewrites each session into free-flowing conversation with an LLM while preserving the claims (\S\ref{sec:findings}, \todo{results pending}).
+
+\paragraph{Memory conditions.}
+At each session $t$ a memory $M_t$ is produced from $M_{t-1}$ and the transcript of session $t$.
+\emph{Rolling} asks the model to rewrite the notes to incorporate the new meeting in at most $B$ words ($B\in\{80,160\}$); outputs are hard-clipped at $B$ words.
+\emph{Truncation} keeps the last $B$ words of the transcript, a recency-only control with the same budget.
+\emph{Full} gives the reader the whole transcript up to $t$, and \emph{empty} gives no memory, estimating guessability.
+The prompts are in Appendix~\ref{app:prompts}.
+
+\paragraph{Probing.}
+After sessions $t\in\{4,8,12,16\}$ (full context) and every session (other conditions), the reader answers each claim's question from $M_t$ alone, choosing among the answer, two distractors and ``This was not mentioned in the notes''; option order is randomised with a fixed seed per (dialogue, claim).
+A probe is correct ($y=1$) only if the reader picks the answer.
+Unless stated otherwise the reader is the same model that writes the memory; \S\ref{sec:findings} reports a fixed external reader.
+We analyse only probes after the claim's last mention ($t\ge L$), so every claim has been fully stated by probe time.
+
+\paragraph{Models.}
+Qwen2.5-1.5B-Instruct, Qwen2.5-7B-Instruct, Phi-3.5-mini-instruct and Gemma-4-E4B-it, greedy decoding; 7B-scale models are run with 4-bit NF4 weights, and a bf16 comparison on one domain leaves conclusions unchanged (Appendix~\ref{app:quant}).

@@ -1,0 +1,9 @@
+\begin{abstract}
+Language agents that work across many sessions keep a running memory: after each session a model rewrites a bounded summary of everything so far.
+We ask which claims such a memory loses, and show that it is not random.
+We introduce \sys{}, a controlled benchmark in which every claim's content, wording and last mention are held fixed while only the number of times it is mentioned is varied.
+Across four domains and four open models, a warning, precondition or objection voiced once is far less likely to survive iterative summarisation than the same claim voiced four times, while a full-context reader shows no such gap; the effect is specific to rewriting, absent under truncation, and survives a schedule that removes the first-mention confound.
+Prompting the summariser to preserve warnings helps strong models but leaves small models, tight budgets and typed compaction strongly frequency-biased.
+We propose \ledger{}, which extracts claims from each new session, consolidates paraphrases in code, and evicts by a type tier rather than by support.
+At equal word budget it recovers \todo{X}--\todo{Y} points of single-mention critical claims over rolling summarisation and never underperforms the strongest prompt-only baseline on them.
+\end{abstract}

@@ -231,3 +231,8 @@ results/bench/probes_*.jsonl
 results/natural/probes_*.jsonl
 results/methods/probes_*.jsonl
 results/methods/*.partial
+paper/*.aux
+paper/*.log
+paper/*.bbl
+paper/*.blg
+paper/*.out

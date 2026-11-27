@@ -1,0 +1,29 @@
+\section{Introduction}
+\label{sec:intro}
+
+% Story arc (draft prose; tighten after results are final).
+A project assistant sits in on sixteen weekly meetings.
+In week five, one engineer remarks that the nightly backup does not cover the audit-log database; nobody mentions it again.
+Meanwhile the migration timeline is restated every week.
+By week sixteen the assistant's notes describe the timeline in detail, and say nothing about the backup.
+Nothing in the notes is false; they are fluent, on-topic and within budget.
+What they have lost is the one claim that should change a go-live decision.
+
+Long-running agents increasingly rely on exactly this kind of memory: a bounded text that a model rewrites after every interaction \citep{wang2023recursively,packer2023memgpt,chhikara2025mem0,xu2025amem}.
+That repeated rewriting loses information is by now well documented, under the names context collapse \citep{zhang2026ace}, the compaction cliff \citep{zerhoudi2026compaction} and goal drift \citep{zahn2026facts}.
+What is not known is \emph{which} information is lost and \emph{why}.
+Observational evidence suggests that frequency matters: concerns raised once are the ones single-pass summaries drop \citep{tamme2027voice}, and summarisers behave like a majority vote \citep{tian2026rgmem}.
+But in natural data a claim's frequency is confounded with its content, its speaker, its recency and its position, so these observations cannot say whether repetition itself protects a claim.
+
+We isolate it.
+\sys{} generates multi-session meeting dialogues from fixed claim banks in which each claim's content and paraphrases are fixed and counterbalanced across dialogues, and only its mention frequency $f\in\{1,2,4\}$ varies; the session of its last mention is drawn independently of $f$.
+Because the same claim appears at every frequency in different dialogues, and because a full-context reader is probed on the same questions, we can estimate the effect of frequency that is specific to iterative summarisation as a difference-in-differences.
+
+\paragraph{Contributions.}
+\begin{itemize}
+\item A controlled benchmark for claim survival in iterative memory, with four domains, decision-critical claim types (warnings, preconditions, dissent) and incidental controls, plus full-context, truncation and empty-memory baselines (\S\ref{sec:benchmark}).
+\item Evidence that rolling summarisation erases single-mention critical claims at a much higher rate than repeated ones, while full context and truncation are flat in frequency, across \todo{N} model--domain cells; the effect survives a clustered schedule that removes the first-mention confound (\S\ref{sec:findings}).
+\item \ledger{}, an extract-then-consolidate memory with tiered eviction, compared at equal budget against prompt-level, typed-compaction \citep{zerhoudi2026compaction} and delta-update \citep{zhang2026ace} baselines (\S\ref{sec:method}, \S\ref{sec:method-results}).
+\end{itemize}
+
+\todo{One paragraph of headline numbers once all runs are in: retention at f=1 vs f=4; ledger gain at f=1; when the prompt fix suffices (7B, loose budget).}

@@ -1,0 +1,19 @@
+\section{Estimating Frequency-Driven Erasure}
+\label{sec:analysis}
+
+Higher frequency could help a reader for reasons that have nothing to do with memory: with the full transcript in context, a claim stated four times in four wordings is easier to find than one stated once.
+We therefore define the effect of interest relative to the full-context reader.
+
+For condition $s$ and budget $B$ we fit, on post-last-mention probes at the checkpoints shared with the full condition,
+\begin{equation}
+y_{icdt} = \alpha_c + \gamma_t + \beta_1 \log_2 f_{cd} + \beta_2 \,[s{=}\mathrm{mem}] + \delta \,\log_2 f_{cd}\cdot[s{=}\mathrm{mem}] + \varepsilon,
+\label{eq:did}
+\end{equation}
+a linear probability model with claim fixed effects $\alpha_c$, checkpoint effects $\gamma_t$, and standard errors clustered by dialogue $d$.
+$\beta_1$ is the frequency slope of the full-context reader and $\delta$ the additional slope introduced by the memory condition: the change in accuracy per doubling of frequency attributable to summarisation.
+We report $\delta$ on the probability scale because the full-context reader is near ceiling, where logit-scale interactions are unstable.
+As a descriptive companion we report \emph{retention}, a condition's accuracy divided by full-context accuracy, by frequency.
+
+For memory strategies (\S\ref{sec:method-results}) we compare strategy $s$ to a baseline $b$ on identical (claim, dialogue, checkpoint) cells,
+$y = \alpha_c + \gamma_t + \theta\,[s] + \varepsilon$, clustered by dialogue; $\theta$ is reported for all critical claims and separately for single-mention critical claims, the cell the paper is about.
+Within-strategy frequency slopes use the same specification with $\log_2 f$ and time since last mention.

@@ -1,0 +1,39 @@
+\section{\ledger{}: Extract, Consolidate, Evict by Tier}
+\label{sec:method}
+
+If a summariser keeps what was repeated, the fix must take the decision of what to keep away from the summariser.
+\ledger{} splits memory maintenance into three steps, of which only the first uses the model.
+
+\paragraph{Extract.}
+After session $t$ the model sees \emph{only} the transcript of session $t$, never the memory, and lists the claims worth remembering, one per line, as \texttt{TYPE | SPEAKER | claim} in at most 15 words, with \texttt{TYPE} one of \textsc{warning}, \textsc{condition}, \textsc{dissent}, \textsc{decision}, \textsc{status} or \textsc{other}.
+Because the extractor never sees earlier notes it cannot rewrite, merge away or re-confirm them; a claim stated once is extracted once and then left alone.
+Lines that do not parse are discarded and counted.
+
+\paragraph{Consolidate.}
+Each extracted claim is matched in code against the current items.
+It merges into the most similar item if their content-word overlap coefficient is at least $0.4$ and they do not mention different numbers; otherwise it is appended verbatim as a new item.
+A merge adds session $t$ to the item's provenance and keeps the original wording.
+The number rule keeps successive status updates (``closed 12 tickets'', ``closed 15 tickets'') as separate items so that stale ones can age out.
+The threshold was calibrated on the banks: it merges 80--91\% of paraphrase pairs of the same claim and 1 of ${\sim}9.6$k pairs of different claims.
+
+\paragraph{Evict by tier.}
+If the rendered items exceed $B$ words, items are removed one at a time in order of the key
+$(\mathrm{tier}(\text{type}),\ \text{last mention},\ \text{hash})$, lowest first, where warnings, conditions and dissent form the top tier, decisions the middle tier, and status and other items the bottom tier.
+Within a tier the least recently mentioned item goes first; a content hash breaks ties so that the result does not depend on output order.
+Support (number of mentioning sessions) is deliberately \emph{not} part of the key: eviction by support is exactly the frequency bias we are trying to remove, and we test it as an ablation.
+Decisions are placed below the top tier because they restate the plan that the majority thread already carries; in a flat protected tier they crowd out the rarer warnings when the budget is tight.
+The memory is rendered as one bullet per item.
+
+\paragraph{Ablations and baselines.}
+All strategies get the same hard word budget and the same reader.
+\begin{itemize}
+\item \textbf{rolling}: generic rolling summary (\S\ref{sec:benchmark}).
+\item \textbf{rolling-imp}: the rolling prompt plus an instruction to preserve every warning, condition, requirement and dissent even if mentioned once, and to drop routine progress first: a deliberately strong prompt-only fix.
+\item \textbf{typed}: rewrite under fixed headings (constraints \& warnings, disagreements, decisions, status, other), our re-implementation of type-aware compaction \citep{zerhoudi2026compaction}.
+\item \textbf{ace}: untyped notes extracted from the new session, recency eviction, in the spirit of delta updates \citep{zhang2026ace}.
+\item \textbf{ledger-supp}: \ledger{} extraction with eviction by support.
+\item \textbf{ledger-protected}: one flat protected tier (warnings, conditions, dissent and decisions).
+\item \textbf{ledger-prov}: as ledger-protected, rendering provenance tags \texttt{[TYPE; speaker; sessions]}, which cost budget.
+\end{itemize}
+The extraction output depends only on the session, not on budget or policy, so all itemised variants consolidate exactly the same extracted claims; differences between them are due to consolidation and eviction alone.
+\todo{Note asymmetry: itemised strategies are not told B; summary strategies are. Report format-compliance stats (bad lines, empty memories).}

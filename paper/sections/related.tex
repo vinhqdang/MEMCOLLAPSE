@@ -1,0 +1,19 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Iterative memory and its losses.}
+Recursive summaries \citep{wang2023recursively}, hierarchical paging \citep{packer2023memgpt}, extract-and-consolidate stores \citep{chhikara2025mem0}, self-organising notes \citep{xu2025amem} and intentional forgetting curves \citep{zhong2024memorybank} all maintain a bounded memory by rewriting it.
+Loss under repeated rewriting has been named context collapse and brevity bias \citep{zhang2026ace}, measured as a compaction cliff for agent rules \citep{zerhoudi2026compaction}, and as constraint erosion under cascading compaction \citep{zahn2026facts}; iterative self-revision also overwrites good intermediate outputs \citep{javaji-etal-2026-another}.
+Benchmarks such as LoCoMo \citep{maharana-etal-2024-evaluating}, LongMemEval \citep{wu2025longmemeval} and MemoryAgentBench \citep{hu2026memoryagentbench} test end-task recall from long histories but do not manipulate how often a fact is stated.
+\todo{Position against Compaction Cliff explicitly: rule types vs. claim frequency with content fixed; no DiD against full context.}
+
+\paragraph{Which content survives compression.}
+Once-mentioned safety facts rarely survive KV-cache compression \citep{zhu2026allergy}; single-pass summaries drop once-raised concerns \citep{tamme2027voice}, under-represent minority perspectives \citep{zhang-etal-2024-fair,zhu2025deliberation,huang-etal-2024-bias,shandilya2018fairness}, strip caveats and scope conditions \citep{peters2025generalization,lee2026summaries}, and favour majority beliefs \citep{aghaebe2026belief}.
+These studies are single-step or observational; we vary frequency causally and follow a claim across rounds.
+
+\paragraph{Collapse and transmission.}
+Recursive training loses distribution tails \citep{shumailov2024collapse}; access to AI may narrow collective knowledge \citep{peterson2025knowledge}; outputs homogenise across and within models \citep{wu2025monoculture,wright-etal-2026-whose}; and transmission chains of LLMs converge to attractors and favour some content types \citep{perez2025telephone,acerbi2023transmission}.
+Iterative memory is a transmission chain inside a single agent; we measure its effect on individual claims.
+
+\paragraph{Mitigations.}
+Type-aware compaction \citep{zerhoudi2026compaction}, delta updates \citep{zhang2026ace}, structured knowledge objects \citep{zahn2026facts}, disagreement-aware synthesis \citep{mishra-etal-2026-beyond} and selective evidence retrieval \citep{min-song-2026-dont,jung2026cdic} are the closest designs; we re-implement the first two as baselines.

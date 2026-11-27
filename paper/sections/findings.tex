@@ -1,0 +1,26 @@
+\section{Rolling Memory Erases What Is Said Once}
+\label{sec:findings}
+
+% OUTLINE with current numbers (docs/pilot_findings.md); final tables/figures TODO.
+
+\paragraph{Main result.}
+\todo{Figure 1: retention vs.\ f for full / rolling / truncation, critical vs.\ incidental, per model, B=160.}
+\begin{itemize}
+\item Qwen2.5-1.5B, four domains, $B{=}160$: full-context slope $+0.006$ to $+0.013$; rolling slope $+0.16$ to $+0.27$; $\delta$ significant in every domain for both critical and incidental claims (e.g.\ critical: Heron $+0.27$, city $+0.10$, science $+0.15$, product $+0.19$, all $p\le .002$). Single-mention critical claims keep 4--22\% of full-context accuracy, four-mention ones 36--75\%.
+\item Qwen2.5-7B: $\delta_{\text{crit}}=+0.105$ on Heron ($p=.002$), weaker pooled over the other three domains ($+0.034$, $p=.03$).
+\item Gemma-4-E4B: importance-driven retention; $\delta$ significant only at $B{=}80$ for critical claims (city $+0.081$, science $+0.120$), not on product.
+\item Phi-3.5-mini: erases most claims regardless of frequency; no summarisation-specific slope.
+\end{itemize}
+
+\paragraph{Controls.}
+Truncation is flat in frequency, so the effect is not recency. Empty memory: 0--19\% (guessing floor).
+Clustered schedule (mentions in the $f$ sessions ending at $L$, so repeated claims are not introduced earlier): $\beta_{\log f}$ stays positive and significant for Qwen-1.5B and Phi-3.5 \todo{DiD version}.
+
+\paragraph{Budget.}
+At $B{=}80$ rolling erases nearly everything for small models, so the frequency gradient is compressed; the gradient is clearest at $B{=}160$, where there is room to keep something and the summariser chooses what was repeated.
+
+\paragraph{A second failure: wholesale overwrite.}
+On product at $B{=}160$, Gemma writes notes for the newest meeting only, keeping ${\sim}6\%$ of claims at every frequency. We report this frequency-independent failure separately.
+
+\paragraph{Robustness (pending).}
+\todo{fixed external reader (Qwen-7B reads all memories); naturalistic dialogues; decision-impact metric.}
