@@ -69,3 +69,25 @@ Qwen2.5-7B (NF4) B=160, DiD critical / incidental: Heron +0.105 (p=0.002) / +0.1
 city+science+product pooled +0.034 (p=0.03) / +0.003 (n.s.). Weaker cross-domain than Qwen-1.5B.
 Quantisation check (Heron, bf16 vs NF4): Qwen-7B DiD crit +0.166 vs +0.105, incid +0.095 vs +0.127;
 gemma n.s. in both, critical retention 0.6 vs 0.5-0.6, incidental ~0.1 in both -> conclusions unchanged.
+
+## Naturalised dialogues (Qwen2.5-1.5B, LLM-rewritten sessions)
+
+Prob-scale DiD logf x rolling vs full, post-last-mention (results/natural/analysis/):
+
+| Domain | crit B=80 | crit B=160 | incid B=80 | incid B=160 |
+|---|---|---|---|---|
+| Heron | +0.038 (p=.12) | +0.218 (p=3e-12) | +0.042 (p=.049) | +0.176 (p=5e-10) |
+| city | +0.049 (p=.11) | +0.062 (p=.047) | -0.005 | +0.021 |
+| pooled | +0.044 (p=.025) | +0.140 (p=2e-9) | +0.019 | +0.099 (p=1e-7) |
+
+Templated reference (B=160 crit): Heron +0.27, city +0.10. Effect persists, ~20-40% smaller.
+City incidental: rolling erases nearly everything (5-12% retention), so there is no gradient left to measure.
+
+## Fixed reader (Qwen2.5-7B NF4 re-probes every writer's Heron memories)
+
+Results are in results/reader/analysis_q7b_reader.txt.
+- Qwen-1.5B writer: crit DiD at B=160 is +0.255 (p=3e-14), versus +0.272 when it reads its own memories.
+- Phi writer: only incidental is significant (+0.101).
+- gemma writer: no effect.
+
+So the gradient lives in the memory, not the reader.
