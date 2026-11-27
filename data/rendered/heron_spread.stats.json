@@ -1,0 +1,7 @@
+{
+  "sessions": 768,
+  "fallback": 201,
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "bank": "data/claims_heron.json",
+  "schedule": "spread"
+}

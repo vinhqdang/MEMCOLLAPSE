@@ -1,6 +1,6 @@
 \section*{Limitations}
 
-Our dialogues are generated from templates and fictional banks so that frequency can be manipulated with content held fixed; this control is the point of the design, but meetings in the wild are messier. We partly address this with LLM-naturalised dialogues \todo{results}.
+Our dialogues are generated from templates and fictional banks so that frequency can be manipulated with content held fixed; this control is the point of the design, but meetings in the wild are messier. We partly address this with LLM-naturalised dialogues, where the effect persists at a somewhat smaller size, but only for one model and two domains.
 We study open models from 1.5B to 7B parameters, run locally, with 7B-scale models quantised to 4 bits; larger and proprietary models may follow importance instructions better, which our 7B results suggest would narrow the gap between \ledger{} and a well-prompted summariser at loose budgets.
 Probes are multiple-choice recognition questions; they measure whether a claim is recoverable from memory, not whether an agent acts on it \todo{decision-impact}.
 Critical versus incidental is defined by us; \ledger{}'s tiers rely on the model's type labels, which are noisy for small models.

@@ -1,0 +1,7 @@
+{
+  "sessions": 768,
+  "fallback": 135,
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "bank": "data/claims_city.json",
+  "schedule": "spread"
+}

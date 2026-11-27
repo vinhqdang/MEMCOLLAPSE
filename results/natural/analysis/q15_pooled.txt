@@ -1,0 +1,20 @@
+freq                                                  1      2      4
+model                 importance strategy budget                     
+Qwen2.5-1.5B-Instruct critical   full     0       0.969  0.994  0.974
+                                 rolling  80      0.190  0.257  0.283
+                                          160     0.165  0.362  0.449
+                      incidental full     0       0.974  0.998  0.994
+                                 rolling  80      0.045  0.082  0.102
+                                          160     0.052  0.260  0.268
+
+== rolling only, all post-last-mention checkpoints, pooled over domains ==
+Qwen2.5-1.5B-Instruct            critical   B=80  beta_logf=+0.417 (p=0.000199) n=5752 domains=2
+Qwen2.5-1.5B-Instruct            critical   B=160 beta_logf=+0.872 (p=1.96e-13) n=5752 domains=2
+Qwen2.5-1.5B-Instruct            incidental B=80  beta_logf=+0.441 (p=0.0083) n=5736 domains=2
+Qwen2.5-1.5B-Instruct            incidental B=160 beta_logf=+0.816 (p=1.6e-10) n=5736 domains=2
+
+== DiD: logf x rolling (rolling vs full at shared checkpoints), claim FE ==
+Qwen2.5-1.5B-Instruct    critical   B=80  logit DiD=+0.193 (p=0.616) | prob slopes full=+0.005 roll=+0.048 DiD=+0.044 (p=0.0253) | retention f1=0.20 f2=0.26 f4=0.29 | n=3236
+Qwen2.5-1.5B-Instruct    critical   B=160 logit DiD=+0.703 (p=0.0512) | prob slopes full=+0.005 roll=+0.145 DiD=+0.140 (p=2.11e-09) | retention f1=0.17 f2=0.36 f4=0.46 | n=3236
+Qwen2.5-1.5B-Instruct    incidental B=80  logit DiD=-0.665 (p=0.409) | prob slopes full=+0.010 roll=+0.029 DiD=+0.019 (p=0.173) | retention f1=0.05 f2=0.08 f4=0.10 | n=3180
+Qwen2.5-1.5B-Instruct    incidental B=160 logit DiD=-0.269 (p=0.734) | prob slopes full=+0.010 roll=+0.109 DiD=+0.099 (p=1.05e-07) | retention f1=0.05 f2=0.26 f4=0.27 | n=3180

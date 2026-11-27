@@ -28,5 +28,12 @@ We re-probe every writer's Heron memories with one fixed reader (Qwen2.5-7B, NF4
 The gradient is a property of the memory: Qwen-1.5B memories read by the 7B reader give $\delta_{\text{crit}}=+0.255$ at $B{=}160$ ($p<10^{-13}$; self-read: $+0.272$), with single-mention critical claims keeping 5\% of full-context accuracy against 64\% at $f{=}4$; incidental $+0.198$.
 Phi-3.5 memories show a weaker gradient (incidental $+0.101$, $p=.005$; critical $+0.044$ to $+0.061$, $p\ge.06$), and Gemma memories none ($|\delta|\le0.016$), matching their self-read profiles.
 
+\paragraph{Naturalistic dialogues.}
+Templated lines could make repeated claims easy to spot.
+We therefore had an LLM rewrite every session of the Heron and city dialogues into free-flowing meeting talk, under checks that each claim's key facts survive, and re-ran Qwen-1.5B.
+Full context stays flat in frequency (slopes $\le+0.008$), and rolling memory again rewards repetition: at $B{=}160$, $\delta_{\text{crit}}=+0.218$ on Heron ($p<10^{-11}$; templated $+0.27$) and $+0.062$ on city ($p=.047$; templated $+0.10$), pooled $+0.140$ ($p<10^{-8}$).
+Single-mention critical claims keep 17\% of full-context accuracy, four-mention ones 46\%.
+On city, rolling memory over the naturalised text erases almost all incidental claims (5--12\% at every frequency), which leaves no gradient to measure.
+
 \paragraph{Robustness (pending).}
-\todo{naturalistic dialogues; decision-impact metric.}
+\todo{decision-impact metric.}
