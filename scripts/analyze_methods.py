@@ -8,7 +8,7 @@ probed, so every strategy is scored on the same (claim, t) cells):
      on f=1 critical claims (the cell the paper is about) reported separately;
   4. mean memory size actually used (words), since itemised memories may under-fill the budget.
 
-Usage: python scripts/analyze_methods.py results/bench/probes_heron_X.jsonl results/methods/probes_heron_X_*.jsonl
+Usage: python scripts/analyze_methods.py [--base STRATEGY] results/bench/probes_heron_X.jsonl results/methods/probes_heron_X_*.jsonl
 """
 from __future__ import annotations
 
@@ -88,7 +88,11 @@ def sizes(d: pd.DataFrame, b: int, order: list[str]) -> None:
 
 
 def main() -> None:
-    d = load(sys.argv[1:])
+    global BASE
+    args = sys.argv[1:]
+    if args[:1] == ["--base"]:  # compare against another strategy instead of generic rolling
+        BASE, args = args[1], args[2:]
+    d = load(args)
     full_t = set(d.loc[d.strategy == "full", "t"])
     d = d[d.t.isin(full_t)]
     order = strategy_order(d)

@@ -1,0 +1,76 @@
+{
+  "80": {
+    "claims": 2677,
+    "lines_new": 2192,
+    "lines_merged": 485,
+    "lines_bad": 17,
+    "truncated_outputs": 0,
+    "evicted": 1903,
+    "evicted_protected": 610,
+    "empty_ledgers": 0,
+    "kept_items_final": 289,
+    "kept_types_final": {
+      "condition": 75,
+      "decision": 164,
+      "dissent": 29,
+      "warning": 16,
+      "other": 2,
+      "status": 3
+    },
+    "bad_per_session": [
+      1,
+      2,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      1,
+      1,
+      1,
+      4,
+      2,
+      1,
+      0,
+      1
+    ]
+  },
+  "160": {
+    "claims": 2677,
+    "lines_new": 2018,
+    "lines_merged": 659,
+    "lines_bad": 17,
+    "truncated_outputs": 0,
+    "evicted": 1430,
+    "evicted_protected": 200,
+    "empty_ledgers": 0,
+    "kept_items_final": 588,
+    "kept_types_final": {
+      "condition": 160,
+      "decision": 230,
+      "warning": 79,
+      "dissent": 106,
+      "status": 4,
+      "other": 9
+    },
+    "bad_per_session": [
+      1,
+      2,
+      0,
+      0,
+      1,
+      2,
+      0,
+      0,
+      1,
+      1,
+      1,
+      4,
+      2,
+      1,
+      0,
+      1
+    ]
+  }
+}

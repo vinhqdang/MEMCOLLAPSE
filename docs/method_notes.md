@@ -59,3 +59,37 @@ Rolling slope at B=160: +0.189; full context: +0.011.
   bias; explicit item retention does.
 - B=80 is too tight for any strategy to rescue singletons by much (+0.06 at best).
 - Cost: incidental claims lose about 0.06-0.09 under itemised strategies.
+
+## Results: Qwen2.5-7B NF4, 3 domains (heron, city, science; 2026-11-27)
+
+Full tables: `results/methods/analysis/qwen7_*.txt`. Pooled, critical claims, accuracy at f=1:
+
+| strategy | B=80 | B=160 |
+|---|---|---|
+| rolling | 0.12 | 0.17 |
+| rolling-imp | 0.40 | 0.70 |
+| typed | 0.31 | 0.46 |
+| ledger-noprov | 0.44 | 0.71 |
+| ledger-tier | 0.62 | 0.71 |
+
+Direct paired test, ledger-tier minus rolling-imp (`--base rolling-imp`,
+`*_pooled_vs_rollingimp.txt`):
+
+| model | B=80 crit. f=1 | B=80 crit. all | B=160 crit. f=1 | B=160 crit. all |
+|---|---|---|---|---|
+| Qwen-1.5B (4 dom.) | +0.049* | -0.027 | +0.276* | +0.166* |
+| Qwen-7B (3 dom.) | +0.221* | +0.148* | +0.016 | -0.028 |
+
+- ledger-tier never loses to the strongest prompt baseline on singleton critical claims and wins
+  in 3 of 4 model x budget cells. Where the model follows the importance prompt well and the
+  budget is loose (7B, B=160), the prompt fix is as good; the ledger's advantage lives where the
+  summariser is weak (1.5B) or the budget is tight (B=80).
+- Tiered vs protected eviction only matters when protected items must be evicted (tight budget):
+  identical at 7B B=160, +0.18 f=1 at 7B B=80.
+- Typed compaction is the most frequency-biased strategy at both model sizes.
+
+## Gemma-4 E4B: wholesale overwrite at B=160 on product
+
+On product at B=160 gemma writes notes for the newest meeting only ("Meeting Notes (Meeting 16)"),
+dropping the history: retention ~0.06 at every frequency. This is a distinct failure (overwrite,
+frequency-independent) and should be reported separately from frequency-driven collapse.
