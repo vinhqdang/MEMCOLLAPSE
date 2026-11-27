@@ -1,0 +1,66 @@
+{
+  "80": {
+    "claims": 5579,
+    "lines_new": 4560,
+    "lines_merged": 1019,
+    "lines_bad": 19,
+    "truncated_outputs": 0,
+    "evicted": 4011,
+    "evicted_protected": 0,
+    "empty_ledgers": 0,
+    "kept_items_final": 549,
+    "kept_types_final": {
+      "other": 549
+    },
+    "bad_per_session": [
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      2,
+      0,
+      2,
+      2,
+      6,
+      0,
+      0,
+      0,
+      2,
+      2
+    ]
+  },
+  "160": {
+    "claims": 5579,
+    "lines_new": 3892,
+    "lines_merged": 1687,
+    "lines_bad": 19,
+    "truncated_outputs": 0,
+    "evicted": 2781,
+    "evicted_protected": 0,
+    "empty_ledgers": 0,
+    "kept_items_final": 1111,
+    "kept_types_final": {
+      "other": 1111
+    },
+    "bad_per_session": [
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      2,
+      0,
+      2,
+      2,
+      6,
+      0,
+      0,
+      0,
+      2,
+      2
+    ]
+  }
+}

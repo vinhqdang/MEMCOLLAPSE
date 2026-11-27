@@ -1,0 +1,110 @@
+
+===== Qwen2.5-7B-Instruct@nf4  domains=['field_study_consortium'] =====
+
+-- accuracy (retention vs full) B=80 --
+  critical   full           f1=0.963(1.00) f2=0.944(1.00) f4=0.993(1.00)
+  critical   rolling        f1=0.136(0.14) f2=0.078(0.08) f4=0.124(0.12)
+  critical   rolling-imp    f1=0.414(0.43) f2=0.502(0.53) f4=0.468(0.47)
+  critical   typed          f1=0.253(0.26) f2=0.669(0.71) f4=0.715(0.72)
+  critical   ace            f1=0.029(0.03) f2=0.041(0.04) f4=0.030(0.03)
+  critical   ledger-supp    f1=0.015(0.02) f2=0.022(0.02) f4=0.648(0.65)
+  critical   ledger-noprov  f1=0.443(0.46) f2=0.394(0.42) f4=0.382(0.38)
+  critical   ledger-tier    f1=0.718(0.75) f2=0.729(0.77) f4=0.693(0.70)
+  critical   ledger         f1=0.176(0.18) f2=0.178(0.19) f4=0.142(0.14)
+  critical   truncate       f1=0.000(0.00) f2=0.000(0.00) f4=0.000(0.00)
+  incidental full           f1=0.929(1.00) f2=0.970(1.00) f4=0.969(1.00)
+  incidental rolling        f1=0.071(0.08) f2=0.045(0.05) f4=0.027(0.03)
+  incidental rolling-imp    f1=0.030(0.03) f2=0.052(0.05) f4=0.058(0.06)
+  incidental typed          f1=0.004(0.00) f2=0.011(0.01) f4=0.015(0.02)
+  incidental ace            f1=0.030(0.03) f2=0.026(0.03) f4=0.004(0.00)
+  incidental ledger-supp    f1=0.000(0.00) f2=0.000(0.00) f4=0.062(0.06)
+  incidental ledger-noprov  f1=0.022(0.02) f2=0.034(0.03) f4=0.039(0.04)
+  incidental ledger-tier    f1=0.037(0.04) f2=0.049(0.05) f4=0.089(0.09)
+  incidental ledger         f1=0.007(0.01) f2=0.007(0.01) f4=0.023(0.02)
+  incidental truncate       f1=0.000(0.00) f2=0.000(0.00) f4=0.000(0.00)
+
+-- frequency slope per doubling (prob scale) B=80 --
+  critical   full=+0.015  rolling=-0.007  rolling-imp=+0.030  typed=+0.233*  ace=+0.001  ledger-supp=+0.315*  ledger-noprov=-0.024  ledger-tier=-0.007  ledger=-0.012  truncate=+0.000
+  incidental full=+0.020  rolling=-0.021*  rolling-imp=+0.016  typed=+0.006  ace=-0.013*  ledger-supp=+0.031*  ledger-noprov=+0.009  ledger-tier=+0.027  ledger=+0.008  truncate=+0.000
+
+-- gain over rolling (same claim, t, dialogue; claim FE, clustered) B=80 --
+  rolling-imp    critical all  +0.349 [+0.262,+0.435] p=3.4e-15
+  rolling-imp    critical f=1  +0.278 [+0.147,+0.410] p=3.3e-05
+  rolling-imp    incidental    -0.001 [-0.031,+0.029] p=0.93
+  typed          critical all  +0.431 [+0.371,+0.492] p=2.7e-44
+  typed          critical f=1  +0.117 [+0.023,+0.212] p=0.015
+  typed          incidental    -0.038 [-0.067,-0.008] p=0.013
+  ace            critical all  -0.079 [-0.128,-0.030] p=0.0016
+  ace            critical f=1  -0.106 [-0.172,-0.040] p=0.0016
+  ace            incidental    -0.028 [-0.055,-0.000] p=0.046
+  ledger-supp    critical all  +0.114 [+0.054,+0.173] p=0.00018
+  ledger-supp    critical f=1  -0.121 [-0.185,-0.056] p=0.00024
+  ledger-supp    incidental    -0.028 [-0.058,+0.003] p=0.077
+  ledger-noprov  critical all  +0.294 [+0.216,+0.372] p=1.4e-13
+  ledger-noprov  critical f=1  +0.308 [+0.194,+0.422] p=1.2e-07
+  ledger-noprov  incidental    -0.016 [-0.044,+0.012] p=0.25
+  ledger-tier    critical all  +0.601 [+0.514,+0.687] p=2.1e-42
+  ledger-tier    critical f=1  +0.582 [+0.465,+0.700] p=3.6e-22
+  ledger-tier    incidental    +0.010 [-0.021,+0.041] p=0.52
+  ledger         critical all  +0.053 [-0.007,+0.114] p=0.085
+  ledger         critical f=1  +0.040 [-0.044,+0.124] p=0.35
+  ledger         incidental    -0.035 [-0.063,-0.007] p=0.014
+  truncate       critical all  -0.112 [-0.163,-0.062] p=1.2e-05
+  truncate       critical f=1  -0.136 [-0.201,-0.070] p=4.7e-05
+  truncate       incidental    -0.048 [-0.074,-0.021] p=0.00041
+
+-- mean memory words B=80: rolling=63 rolling-imp=69 typed=73 ace=77 ledger-supp=74 ledger-noprov=76 ledger-tier=76 ledger=73 truncate=80
+
+-- accuracy (retention vs full) B=160 --
+  critical   full           f1=0.963(1.00) f2=0.944(1.00) f4=0.993(1.00)
+  critical   rolling        f1=0.172(0.18) f2=0.223(0.24) f4=0.210(0.21)
+  critical   rolling-imp    f1=0.714(0.74) f2=0.758(0.80) f4=0.865(0.87)
+  critical   typed          f1=0.502(0.52) f2=0.758(0.80) f4=0.787(0.79)
+  critical   ace            f1=0.132(0.14) f2=0.156(0.17) f4=0.101(0.10)
+  critical   ledger-supp    f1=0.103(0.11) f2=0.234(0.25) f4=0.865(0.87)
+  critical   ledger-noprov  f1=0.832(0.86) f2=0.840(0.89) f4=0.869(0.88)
+  critical   ledger-tier    f1=0.842(0.87) f2=0.848(0.90) f4=0.880(0.89)
+  critical   ledger         f1=0.707(0.73) f2=0.684(0.72) f4=0.663(0.67)
+  critical   truncate       f1=0.015(0.02) f2=0.045(0.05) f4=0.022(0.02)
+  incidental full           f1=0.929(1.00) f2=0.970(1.00) f4=0.969(1.00)
+  incidental rolling        f1=0.193(0.21) f2=0.127(0.13) f4=0.151(0.16)
+  incidental rolling-imp    f1=0.082(0.09) f2=0.101(0.10) f4=0.069(0.07)
+  incidental typed          f1=0.015(0.02) f2=0.041(0.04) f4=0.077(0.08)
+  incidental ace            f1=0.164(0.18) f2=0.109(0.11) f4=0.100(0.10)
+  incidental ledger-supp    f1=0.019(0.02) f2=0.034(0.03) f4=0.139(0.14)
+  incidental ledger-noprov  f1=0.082(0.09) f2=0.109(0.11) f4=0.116(0.12)
+  incidental ledger-tier    f1=0.082(0.09) f2=0.112(0.12) f4=0.112(0.12)
+  incidental ledger         f1=0.033(0.04) f2=0.045(0.05) f4=0.097(0.10)
+  incidental truncate       f1=0.019(0.02) f2=0.015(0.02) f4=0.004(0.00)
+
+-- frequency slope per doubling (prob scale) B=160 --
+  critical   full=+0.015  rolling=+0.020  rolling-imp=+0.079*  typed=+0.145*  ace=-0.011  ledger-supp=+0.383*  ledger-noprov=+0.022  ledger-tier=+0.022  ledger=-0.017  truncate=+0.005
+  incidental full=+0.020  rolling=-0.020  rolling-imp=-0.004  typed=+0.032*  ace=-0.031*  ledger-supp=+0.061*  ledger-noprov=+0.019  ledger-tier=+0.017  ledger=+0.033*  truncate=-0.007
+
+-- gain over rolling (same claim, t, dialogue; claim FE, clustered) B=160 --
+  rolling-imp    critical all  +0.577 [+0.507,+0.648] p=4.9e-58
+  rolling-imp    critical f=1  +0.542 [+0.420,+0.664] p=3.1e-18
+  rolling-imp    incidental    -0.073 [-0.137,-0.009] p=0.025
+  typed          critical all  +0.480 [+0.409,+0.551] p=6.2e-40
+  typed          critical f=1  +0.330 [+0.206,+0.454] p=1.8e-07
+  typed          incidental    -0.113 [-0.173,-0.053] p=0.00022
+  ace            critical all  -0.072 [-0.128,-0.015] p=0.013
+  ace            critical f=1  -0.040 [-0.108,+0.027] p=0.24
+  ace            incidental    -0.033 [-0.097,+0.032] p=0.32
+  ledger-supp    critical all  +0.197 [+0.128,+0.265] p=1.8e-08
+  ledger-supp    critical f=1  -0.070 [-0.141,+0.001] p=0.054
+  ledger-supp    incidental    -0.094 [-0.161,-0.028] p=0.0052
+  ledger-noprov  critical all  +0.645 [+0.561,+0.730] p=1.1e-50
+  ledger-noprov  critical f=1  +0.659 [+0.551,+0.768] p=8.8e-33
+  ledger-noprov  incidental    -0.055 [-0.114,+0.003] p=0.065
+  ledger-tier    critical all  +0.655 [+0.572,+0.738] p=2.3e-54
+  ledger-tier    critical f=1  +0.670 [+0.564,+0.777] p=7.3e-35
+  ledger-tier    incidental    -0.055 [-0.114,+0.003] p=0.064
+  ledger         critical all  +0.483 [+0.406,+0.561] p=2.2e-34
+  ledger         critical f=1  +0.535 [+0.420,+0.650] p=8.1e-20
+  ledger         incidental    -0.099 [-0.161,-0.038] p=0.0015
+  truncate       critical all  -0.174 [-0.228,-0.120] p=2.8e-10
+  truncate       critical f=1  -0.158 [-0.224,-0.091] p=3.7e-06
+  truncate       incidental    -0.145 [-0.206,-0.083] p=3.7e-06
+
+-- mean memory words B=160: rolling=122 rolling-imp=144 typed=117 ace=157 ledger-supp=154 ledger-noprov=155 ledger-tier=155 ledger=154 truncate=160
