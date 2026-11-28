@@ -4,7 +4,12 @@
 % OUTLINE with current numbers (docs/pilot_findings.md); final tables/figures TODO.
 
 \paragraph{Main result.}
-\todo{Figure 1: retention vs.\ f for full / rolling / truncation, critical vs.\ incidental, per model, B=160.}
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/retention.pdf}
+\caption{Accuracy after a claim's last mention as a function of how often it was mentioned ($B{=}160$, pooled over four domains). Full context is flat in $f$; the rolling summary keeps what was repeated. Truncation keeps only the most recent text and is flat as well. Bars: 95\% dialogue-clustered bootstrap CIs.}
+\label{fig:retention}
+\end{figure}
 \begin{itemize}
 \item Qwen2.5-1.5B, four domains, $B{=}160$: full-context slope $+0.006$ to $+0.013$; rolling slope $+0.16$ to $+0.27$; $\delta$ significant in every domain for both critical and incidental claims (e.g.\ critical: Heron $+0.27$, city $+0.10$, science $+0.15$, product $+0.19$, all $p\le .002$). Single-mention critical claims keep 4--22\% of full-context accuracy, four-mention ones 36--75\%.
 \item Qwen2.5-7B: $\delta_{\text{crit}}=+0.105$ on Heron ($p=.002$), weaker pooled over the other three domains ($+0.034$, $p=.03$).
