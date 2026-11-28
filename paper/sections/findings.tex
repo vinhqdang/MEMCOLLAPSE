@@ -40,5 +40,11 @@ Full context stays flat in frequency (slopes $\le+0.008$), and rolling memory ag
 Single-mention critical claims keep 17\% of full-context accuracy, four-mention ones 46\%.
 On city, rolling memory over the naturalised text erases almost all incidental claims (5--12\% at every frequency), which leaves no gradient to measure.
 
-\paragraph{Robustness (pending).}
-\todo{decision-impact metric.}
+\paragraph{From recall to decisions.}
+Recognising a claim is not the same as acting on it.
+For each critical claim we wrote a decision question that puts the agent in front of the choice the claim bears on (\emph{``The team plans to wipe the old servers and rely on the nightly backup. What should they do first?''}), with four options: the action that applies the claim, a lure that proceeds as if the claim had never been raised, an action built on a wrong detail, and ``not mentioned''.
+With the full transcript both models choose the right action 91--99\% of the time.
+Under rolling memory at $B{=}160$, a single-mention claim leads to the right action only 34\% (Qwen-1.5B) and 16\% (Qwen-7B) of the time, and the frequency gradient carries over to decisions ($\delta=+0.079$, $p<10^{-5}$, and $+0.052$, $p<.001$, pooled over four domains).
+The two models fail differently.
+Qwen-1.5B takes the lure in 15\% of single-mention cases against 2\% with full context, proceeding as planned past a warning it has forgotten.
+Qwen-7B never takes the lure; it answers that the notes are silent (83\%), which is safer but still leaves the decision unmade.

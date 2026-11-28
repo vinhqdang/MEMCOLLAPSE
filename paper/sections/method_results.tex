@@ -31,6 +31,11 @@ Directly against rolling-imp, \ledger{} gains on single-mention critical claims 
 A capable summariser with room to spare follows the instruction to keep warnings; a weak summariser, or a tight budget, does not.
 \ledger{} never loses on the target cell.
 
+\paragraph{Better memory, better decisions.}
+The gains carry over to the decision probes of \S\ref{sec:findings}.
+On single-mention critical claims at $B{=}160$, \ledger{} raises the rate of correct actions over rolling by $+0.26$ for Qwen-1.5B and $+0.51$ for Qwen-7B (both $p<10^{-25}$), and cuts Qwen-1.5B's lure rate by 6 points ($p<10^{-4}$); at $B{=}80$ the gains are $+0.05$ and $+0.45$.
+rolling-imp matches \ledger{} only for Qwen-7B at $B{=}160$ ($+0.50$), and for Qwen-1.5B it neither improves decisions nor reduces lures significantly.
+
 \paragraph{Typing the summary is not enough.}
 Typed compaction raises critical accuracy overall but mainly for repeated claims: it is the most frequency-biased strategy at both model sizes (slope $+0.28$ and $+0.18$ per doubling at $B{=}160$, vs.\ $+0.09$ and $+0.05$ for \ledger{}).
 

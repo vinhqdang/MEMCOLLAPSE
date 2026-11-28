@@ -1,0 +1,58 @@
+
+===== Qwen2.5-1.5B-Instruct  domains=['city', 'heron', 'product', 'science'] =====
+                      acc                 lure              
+freq                    1      2      4      1      2      4
+strategy    budget                                          
+empty       0       0.173  0.170  0.165  0.060  0.082  0.072
+full        0       0.911  0.966  0.981  0.024  0.014  0.012
+ledger-tier 80      0.402  0.409  0.385  0.115  0.110  0.140
+            160     0.605  0.620  0.725  0.084  0.082  0.064
+rolling     80      0.353  0.388  0.390  0.167  0.158  0.168
+            160     0.343  0.547  0.570  0.148  0.099  0.129
+rolling-imp 80      0.381  0.447  0.486  0.152  0.140  0.140
+            160     0.376  0.537  0.562  0.131  0.100  0.111
+  DiD y    ledger-tier  B=80  -0.044 (p=0.00416)
+  DiD lure ledger-tier  B=80  +0.018 (p=0.054)
+  DiD y    ledger-tier  B=160 +0.024 (p=0.11)
+  DiD lure ledger-tier  B=160 -0.004 (p=0.593)
+  DiD y    rolling      B=80  -0.017 (p=0.377)
+  DiD lure rolling      B=80  +0.006 (p=0.606)
+  DiD y    rolling      B=160 +0.079 (p=1.18e-06)
+  DiD lure rolling      B=160 -0.004 (p=0.749)
+  DiD y    rolling-imp  B=80  +0.017 (p=0.333)
+  DiD lure rolling-imp  B=80  +0.000 (p=0.998)
+  DiD y    rolling-imp  B=160 +0.058 (p=0.00063)
+  DiD lure rolling-imp  B=160 -0.004 (p=0.704)
+  f=1 gain over rolling B=80  ledger-tier  acc +0.049 (p=0.0142) | lure -0.051 (p=4.9e-05)
+  f=1 gain over rolling B=80  rolling-imp  acc +0.027 (p=0.113) | lure -0.015 (p=0.318)
+  f=1 gain over rolling B=160 ledger-tier  acc +0.262 (p=1.85e-26) | lure -0.064 (p=3.5e-05)
+  f=1 gain over rolling B=160 rolling-imp  acc +0.033 (p=0.147) | lure -0.017 (p=0.208)
+
+===== Qwen2.5-7B-Instruct-nf4  domains=['city', 'heron', 'product', 'science'] =====
+                      acc               lure            
+freq                    1      2      4    1    2      4
+strategy    budget                                      
+empty       0       0.003  0.000  0.003  0.0  0.0  0.000
+full        0       0.951  0.980  0.988  0.0  0.0  0.000
+ledger-tier 80      0.582  0.652  0.698  0.0  0.0  0.004
+            160     0.668  0.745  0.835  0.0  0.0  0.000
+rolling     80      0.139  0.148  0.169  0.0  0.0  0.000
+            160     0.158  0.286  0.299  0.0  0.0  0.001
+rolling-imp 80      0.383  0.539  0.508  0.0  0.0  0.000
+            160     0.662  0.767  0.809  0.0  0.0  0.000
+  DiD y    ledger-tier  B=80  +0.039 (p=0.0227)
+  DiD lure ledger-tier  B=80  +0.002 (p=0.316)
+  DiD y    ledger-tier  B=160 +0.065 (p=2.43e-05)
+  DiD lure ledger-tier  B=160 +0.000 (p=nan)
+  DiD y    rolling      B=80  -0.004 (p=0.747)
+  DiD lure rolling      B=80  +0.000 (p=nan)
+  DiD y    rolling      B=160 +0.052 (p=0.000407)
+  DiD lure rolling      B=160 +0.000 (p=0.319)
+  DiD y    rolling-imp  B=80  +0.044 (p=0.0461)
+  DiD lure rolling-imp  B=80  +0.000 (p=nan)
+  DiD y    rolling-imp  B=160 +0.055 (p=0.000438)
+  DiD lure rolling-imp  B=160 +0.000 (p=nan)
+  f=1 gain over rolling B=80  ledger-tier  acc +0.453 (p=9.09e-49) | lure +0.000 (p=nan)
+  f=1 gain over rolling B=80  rolling-imp  acc +0.254 (p=4.17e-13) | lure +0.000 (p=nan)
+  f=1 gain over rolling B=160 ledger-tier  acc +0.507 (p=1.37e-59) | lure +0.000 (p=nan)
+  f=1 gain over rolling B=160 rolling-imp  acc +0.501 (p=5.61e-55) | lure +0.000 (p=nan)
